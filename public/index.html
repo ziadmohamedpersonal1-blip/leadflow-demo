@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LeadFlow Command Center</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #020617;
+      color: #e5e7eb;
+    }
+
+    .container {
+      width: 96%;
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 28px 0;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: -0.5px;
+    }
+
+    .brand span {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      background: #082f49;
+      color: #7dd3fc;
+      border: 1px solid #0ea5e9;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 18px;
+      background: radial-gradient(circle at top left, #1e3a8a, #111827 45%, #020617);
+      border: 1px solid #334155;
+      border-radius: 22px;
+      padding: 26px;
+      margin-bottom: 18px;
+      align-items: center;
+    }
+
+    .hero h2 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero p {
+      margin: 0;
+      color: #cbd5e1;
+      line-height: 1.6;
+      max-width: 850px;
+      font-size: 16px;
+    }
+
+    .hero-revenue-card {
+      background: rgba(2, 6, 23, 0.72);
+      border: 1px solid #38bdf8;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 0 28px rgba(56, 189, 248, 0.08);
+    }
+
+    .revenue-label {
+      color: #93c5fd;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .revenue-number {
+      font-size: 38px;
+      font-weight: 900;
+      color: #38bdf8;
+      margin-bottom: 8px;
+    }
+
+    .revenue-note {
+      color: #cbd5e1;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .sales-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .sales-card {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .sales-card h4 {
+      margin: 0 0 7px;
+      font-size: 16px;
+      color: #f8fafc;
+    }
+
+    .sales-card p {
+      margin: 0;
+      color: #94a3b8;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .sales-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #1e3a8a;
+      color: #bfdbfe;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .integrations-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 13px 15px;
+      margin-bottom: 18px;
+    }
+
+    .integrations-bar strong {
+      color: #f8fafc;
+      margin-right: 4px;
+    }
+
+    .integration-chip {
+      background: #020617;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .before-after {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .before-box,
+    .after-box {
+      border-radius: 16px;
+      padding: 18px;
+      border: 1px solid #334155;
+      background: #0f172a;
+    }
+
+    .before-box {
+      border-color: #7f1d1d;
+    }
+
+    .after-box {
+      border-color: #047857;
+    }
+
+    .before-box h3,
+    .after-box h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .before-box h3 {
+      color: #fecaca;
+    }
+
+    .after-box h3 {
+      color: #bbf7d0;
+    }
+
+    .before-box ul,
+    .after-box ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #cbd5e1;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .impact-card {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .impact-number {
+      font-size: 26px;
+      font-weight: 900;
+      color: #38bdf8;
+      margin-bottom: 5px;
+    }
+
+    .impact-label {
+      color: #94a3b8;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .kpi {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .kpi-number {
+      font-size: 30px;
+      font-weight: 800;
+      color: #38bdf8;
+      margin-bottom: 5px;
+    }
+
+    .kpi-label {
+      color: #94a3b8;
+      font-size: 13px;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 390px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .card {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    .card h3 {
+      margin: 0 0 16px;
+      font-size: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: #cbd5e1;
+      font-size: 13px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 13px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      background: #020617;
+      color: #e5e7eb;
+      outline: none;
+      font-size: 14px;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #38bdf8;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      background: #2563eb;
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 11px 13px;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    .full-button {
+      width: 100%;
+      padding: 13px;
+    }
+
+    .message {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 10px;
+      display: none;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .success {
+      background: #064e3b;
+      border: 1px solid #10b981;
+      color: #d1fae5;
+    }
+
+    .error {
+      background: #7f1d1d;
+      border: 1px solid #ef4444;
+      color: #fee2e2;
+    }
+
+    .toast {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 999;
+      display: none;
+      padding: 13px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      max-width: 350px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr auto auto auto;
+      gap: 10px;
+      margin-bottom: 14px;
+      align-items: center;
+    }
+
+    .toolbar input,
+    .toolbar select {
+      margin-bottom: 0;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid #334155;
+      border-radius: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 880px;
+      background: #020617;
+    }
+
+    th {
+      text-align: left;
+      color: #94a3b8;
+      font-size: 12px;
+      padding: 13px;
+      border-bottom: 1px solid #334155;
+      background: #0b1120;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      padding: 13px;
+      border-bottom: 1px solid #1e293b;
+      font-size: 14px;
+      color: #e5e7eb;
+      vertical-align: middle;
+    }
+
+    tr:hover td {
+      background: #0b1120;
+    }
+
+    .muted {
+      color: #94a3b8;
+      font-size: 13px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge-blue {
+      background: #1e3a8a;
+      color: #bfdbfe;
+    }
+
+    .badge-green {
+      background: #064e3b;
+      color: #bbf7d0;
+    }
+
+    .badge-red {
+      background: #7f1d1d;
+      color: #fecaca;
+    }
+
+    .badge-orange {
+      background: #78350f;
+      color: #fed7aa;
+    }
+
+    .badge-gray {
+      background: #334155;
+      color: #e2e8f0;
+    }
+
+    .badge-hot {
+      background: #7f1d1d;
+      color: #fecaca;
+    }
+
+    .badge-warm {
+      background: #78350f;
+      color: #fed7aa;
+    }
+
+    .badge-cold {
+      background: #1e3a8a;
+      color: #bfdbfe;
+    }
+
+    .details-box {
+      display: none;
+      margin-top: 20px;
+      background: #020617;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .details-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+
+    .details-header h3 {
+      margin: 0 0 6px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .detail-line {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 10px;
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+
+    .detail-line strong {
+      color: #f8fafc;
+    }
+
+    .panel {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 13px;
+      color: #dbeafe;
+      font-size: 14px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      margin: 18px 0 10px;
+      color: #f8fafc;
+      font-size: 18px;
+    }
+
+    .log-item {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .log-item small {
+      color: #94a3b8;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 16px 0;
+    }
+
+    .green-button {
+      background: #047857;
+    }
+
+    .green-button:hover {
+      background: #065f46;
+    }
+
+    .orange-button {
+      background: #b45309;
+    }
+
+    .orange-button:hover {
+      background: #92400e;
+    }
+
+    .red-button {
+      background: #b91c1c;
+    }
+
+    .red-button:hover {
+      background: #991b1b;
+    }
+
+    .purple-button {
+      background: #6d28d9;
+    }
+
+    .purple-button:hover {
+      background: #5b21b6;
+    }
+
+    .gray-button {
+      background: #475569;
+    }
+
+    .gray-button:hover {
+      background: #334155;
+    }
+
+    .small-button {
+      padding: 8px 10px;
+      font-size: 12px;
+      background: #1e40af;
+    }
+
+    .empty-state {
+      padding: 25px;
+      color: #94a3b8;
+      text-align: center;
+    }
+
+    @media (max-width: 1150px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .sales-grid,
+      .impact-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .kpi-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .sales-grid,
+      .impact-grid,
+      .before-after {
+        grid-template-columns: 1fr;
+      }
+
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .revenue-number {
+        font-size: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="toastBox" class="toast"></div>
+
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <h1>LeadFlow Command Center</h1>
+        <span>AI-powered lead capture, CRM sync, follow-up, scoring, and tracking system.</span>
+      </div>
+
+      <div class="top-actions">
+        <button class="green-button" onclick="bookDemo()">Build This For My Business</button>
+        <button class="purple-button" onclick="exportLeadsCsv()">Export Report</button>
+        <div class="pill">Agency Demo</div>
+      </div>
+    </div>
+
+    <div class="hero">
+      <div>
+        <h2>Never lose, duplicate, or delay a new lead again.</h2>
+        <p>
+          LeadFlow captures every new lead, blocks duplicates, syncs contacts to CRM,
+          scores lead quality, prepares follow-up drafts, exports reports, and tracks every action
+          from one clean command center.
+        </p>
+      </div>
+
+      <div class="hero-revenue-card">
+        <div class="revenue-label">Estimated Pipeline Opportunity</div>
+        <div class="revenue-number" id="estimatedPipeline">$0</div>
+        <div class="revenue-note" id="pipelineNote">
+          Based on current leads, service type, budget, and lead quality score.
+        </div>
+      </div>
+    </div>
+
+    <div class="sales-grid">
+      <div class="sales-card">
+        <div class="sales-icon">1</div>
+        <h4>No Lost Leads</h4>
+        <p>Every new lead is captured, stored, and visible inside the dashboard automatically.</p>
+      </div>
+
+      <div class="sales-card">
+        <div class="sales-icon">2</div>
+        <h4>Duplicates Blocked</h4>
+        <p>Repeated submissions are detected before they create messy CRM records.</p>
+      </div>
+
+      <div class="sales-card">
+        <div class="sales-icon">3</div>
+        <h4>Faster Follow-up</h4>
+        <p>Email drafts and lead details are ready instantly so your team can respond faster.</p>
+      </div>
+
+      <div class="sales-card">
+        <div class="sales-icon">4</div>
+        <h4>Cleaner CRM</h4>
+        <p>Qualified leads sync into CRM with status, history, and activity tracking.</p>
+      </div>
+    </div>
+
+    <div class="integrations-bar">
+      <strong>Works with:</strong>
+      <span class="integration-chip">GoHighLevel</span>
+      <span class="integration-chip">HubSpot</span>
+      <span class="integration-chip">Google Sheets</span>
+      <span class="integration-chip">Gmail</span>
+      <span class="integration-chip">WhatsApp</span>
+      <span class="integration-chip">Slack</span>
+      <span class="integration-chip">Any CRM with API</span>
+    </div>
+
+    <div class="before-after">
+      <div class="before-box">
+        <h3>Before LeadFlow</h3>
+        <ul>
+          <li>Leads scattered across forms, inboxes, spreadsheets, and ads.</li>
+          <li>Slow replies cause hot leads to go cold.</li>
+          <li>Duplicate leads create messy CRM data.</li>
+          <li>No clear visibility into what happened with each lead.</li>
+        </ul>
+      </div>
+
+      <div class="after-box">
+        <h3>After LeadFlow</h3>
+        <ul>
+          <li>Every lead is captured in one command center.</li>
+          <li>Hot leads are scored and prioritized.</li>
+          <li>Follow-up drafts are ready instantly.</li>
+          <li>CRM sync and every action are tracked automatically.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="impact-grid">
+      <div class="impact-card">
+        <div class="impact-number" id="hotPipeline">$0</div>
+        <div class="impact-label">Hot lead pipeline detected</div>
+      </div>
+
+      <div class="impact-card">
+        <div class="impact-number" id="blockedValue">$0</div>
+        <div class="impact-label">Estimated duplicate clean-up value protected</div>
+      </div>
+
+      <div class="impact-card">
+        <div class="impact-number" id="crmHealth">0%</div>
+        <div class="impact-label">CRM sync health</div>
+      </div>
+
+      <div class="impact-card">
+        <div class="impact-number" id="responseRisk">0</div>
+        <div class="impact-label">Leads still waiting for first reply</div>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-number" id="totalLeads">0</div>
+        <div class="kpi-label">Total Leads</div>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-number" id="newLeads">0</div>
+        <div class="kpi-label">New Leads</div>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-number" id="repliedLeads">0</div>
+        <div class="kpi-label">Replied Leads</div>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-number" id="crmSyncedLeads">0</div>
+        <div class="kpi-label">CRM Synced</div>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-number" id="duplicateBlocked">0</div>
+        <div class="kpi-label">Duplicates Blocked</div>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-number" id="hotLeads">0</div>
+        <div class="kpi-label">Hot Leads</div>
+      </div>
+    </div>
+
+    <div class="main-grid">
+      <div class="card">
+        <h3>Submit New Lead</h3>
+
+        <form id="leadForm">
+          <label>Name</label>
+          <input type="text" id="name" placeholder="Example: Ahmed Mohamed" required />
+
+          <label>Email</label>
+          <input type="email" id="email" placeholder="example@gmail.com" required />
+
+          <label>Phone</label>
+          <input type="text" id="phone" placeholder="01000000000" required />
+
+          <label>Service Needed</label>
+          <select id="service" required>
+            <option value="">Choose service</option>
+            <option value="SEO">SEO</option>
+            <option value="Web Design">Web Design</option>
+            <option value="Social Media Management">Social Media Management</option>
+            <option value="Landscaping">Landscaping</option>
+            <option value="Home Cleaning">Home Cleaning</option>
+          </select>
+
+          <label>Budget</label>
+          <input type="text" id="budget" placeholder="Example: 1000" />
+
+          <label>Best Time To Contact</label>
+          <input type="text" id="bestTimeToContact" placeholder="Example: Morning / Today / ASAP" />
+
+          <label>Notes</label>
+          <textarea id="notes" rows="3" placeholder="Optional lead notes"></textarea>
+
+          <button class="full-button" type="submit">Submit Lead</button>
+
+          <div id="messageBox" class="message"></div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3>Lead Management</h3>
+
+        <div class="toolbar">
+          <input id="searchInput" type="text" placeholder="Search name, email, phone, service..." />
+
+          <select id="statusFilter">
+            <option value="">All Statuses</option>
+            <option value="New Lead">New Lead</option>
+            <option value="Replied">Replied</option>
+          </select>
+
+          <select id="serviceFilter">
+            <option value="">All Services</option>
+            <option value="SEO">SEO</option>
+            <option value="Web Design">Web Design</option>
+            <option value="Social Media Management">Social Media Management</option>
+            <option value="Landscaping">Landscaping</option>
+            <option value="Home Cleaning">Home Cleaning</option>
+          </select>
+
+          <button onclick="loadLeads()">Search</button>
+          <button onclick="resetFilters()">Reset</button>
+          <button class="purple-button" onclick="exportLeadsCsv()">Export CSV</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Lead</th>
+                <th>Service</th>
+                <th>Status</th>
+                <th>CRM</th>
+                <th>Score</th>
+                <th>Created</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="leadsTableBody"></tbody>
+          </table>
+        </div>
+
+        <div id="leadDetails" class="details-box"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const leadForm = document.getElementById("leadForm");
+    const messageBox = document.getElementById("messageBox");
+    const toastBox = document.getElementById("toastBox");
+
+    let currentEmailDraftText = "";
+
+    const currency = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0
+    });
+
+    function escapeHtml(value) {
+      if (value === null || value === undefined) {
+        return "";
+      }
+
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function showMessage(message, type) {
+      messageBox.textContent = message;
+      messageBox.className = "message " + type;
+      messageBox.style.display = "block";
+
+      toastBox.textContent = message;
+      toastBox.className = "toast " + type;
+      toastBox.style.display = "block";
+
+      setTimeout(() => {
+        toastBox.style.display = "none";
+      }, 3000);
+    }
+
+    function bookDemo() {
+    showMessage("Great. In the live version, this would open a booking calendar or send the request to your sales team.", "success");
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) {
+        return "Not provided";
+      }
+
+      const date = new Date(dateString);
+
+      if (isNaN(date.getTime())) {
+        return dateString;
+      }
+
+      return date.toLocaleString();
+    }
+
+    function getEstimatedDealValue(lead) {
+      const service = (lead.service || "").toLowerCase();
+      const budgetText = String(lead.budget || "").replace(/[^\d]/g, "");
+      const budget = Number(budgetText || 0);
+
+      let baseValue = 1000;
+
+      if (service.includes("web design")) {
+        baseValue = 5000;
+      } else if (service.includes("landscaping")) {
+        baseValue = 7500;
+      } else if (service.includes("seo")) {
+        baseValue = 3000;
+      } else if (service.includes("social")) {
+        baseValue = 3500;
+      } else if (service.includes("home cleaning")) {
+        baseValue = 600;
+      }
+
+      return Math.max(baseValue, budget);
+    }
+
+    function calculateLeadScore(lead) {
+      let score = 0;
+      const reasons = [];
+
+      const service = (lead.service || "").toLowerCase();
+      const budgetText = String(lead.budget || "").replace(/[^\d]/g, "");
+      const budget = Number(budgetText || 0);
+      const bestTime = (lead.bestTimeToContact || "").toLowerCase();
+      const notes = (lead.notes || "").toLowerCase();
+
+      if (service.includes("web design")) {
+        score += 30;
+        reasons.push("High-value service requested");
+      } else if (service.includes("landscaping")) {
+        score += 25;
+        reasons.push("Project-based service requested");
+      } else if (service.includes("seo")) {
+        score += 20;
+        reasons.push("Marketing service requested");
+      } else if (service.includes("social")) {
+        score += 15;
+        reasons.push("Recurring service requested");
+      } else {
+        score += 10;
+        reasons.push("Service interest detected");
+      }
+
+      if (budget >= 1000) {
+        score += 35;
+        reasons.push("Strong budget");
+      } else if (budget >= 500) {
+        score += 25;
+        reasons.push("Good budget");
+      } else if (budget > 0) {
+        score += 10;
+        reasons.push("Budget provided");
+      }
+
+      if (
+        bestTime.includes("asap") ||
+        bestTime.includes("today") ||
+        bestTime.includes("now") ||
+        bestTime.includes("morning")
+      ) {
+        score += 20;
+        reasons.push("High intent contact timing");
+      }
+
+      if (notes.length > 10) {
+        score += 10;
+        reasons.push("Detailed notes provided");
+      }
+
+      if (lead.crmSynced === true) {
+        score += 5;
+        reasons.push("CRM synced successfully");
+      }
+
+      let label = "Cold";
+      let className = "badge-cold";
+
+      if (score >= 70) {
+        label = "Hot";
+        className = "badge-hot";
+      } else if (score >= 40) {
+        label = "Warm";
+        className = "badge-warm";
+      }
+
+      return {
+        score: Math.min(score, 100),
+        label: label,
+        className: className,
+        reasons: reasons
+      };
+    }
+
+    function calculateRevenueMetrics(leads, duplicateBlocked) {
+      let estimatedPipeline = 0;
+      let hotPipeline = 0;
+
+      leads.forEach((lead) => {
+        const score = calculateLeadScore(lead);
+        const value = getEstimatedDealValue(lead);
+
+        if (score.label === "Hot") {
+          estimatedPipeline += value;
+          hotPipeline += value;
+        } else if (score.label === "Warm") {
+          estimatedPipeline += value * 0.5;
+        } else {
+          estimatedPipeline += value * 0.15;
+        }
+      });
+
+      const crmSynced = leads.filter((lead) => lead.crmSynced === true).length;
+      const crmHealth = leads.length === 0 ? 0 : Math.round((crmSynced / leads.length) * 100);
+      const waitingForReply = leads.filter((lead) => lead.firstReplySent !== "Yes").length;
+      const blockedValue = duplicateBlocked * 500;
+
+      return {
+        estimatedPipeline,
+        hotPipeline,
+        blockedValue,
+        crmHealth,
+        waitingForReply
+      };
+    }
+
+    async function loadDashboard() {
+      try {
+        const dashboardResponse = await fetch("/dashboard");
+        const dashboardResult = await dashboardResponse.json();
+        const data = dashboardResult.data;
+
+        const leadsResponse = await fetch("/leads");
+        const leadsResult = await leadsResponse.json();
+        const leads = leadsResult.data || [];
+
+        const duplicateCount = data.duplicateBlocked ?? data.duplicateBlockedCount ?? 0;
+        const hotCount = leads.filter((lead) => calculateLeadScore(lead).label === "Hot").length;
+        const revenue = calculateRevenueMetrics(leads, duplicateCount);
+
+        document.getElementById("totalLeads").textContent = data.totalLeads || 0;
+        document.getElementById("newLeads").textContent = data.newLeads || 0;
+        document.getElementById("repliedLeads").textContent = data.repliedLeads || 0;
+        document.getElementById("crmSyncedLeads").textContent = data.crmSyncedLeads || 0;
+        document.getElementById("duplicateBlocked").textContent = duplicateCount;
+        document.getElementById("hotLeads").textContent = hotCount;
+
+        document.getElementById("estimatedPipeline").textContent = currency.format(revenue.estimatedPipeline);
+        document.getElementById("hotPipeline").textContent = currency.format(revenue.hotPipeline);
+        document.getElementById("blockedValue").textContent = currency.format(revenue.blockedValue);
+        document.getElementById("crmHealth").textContent = `${revenue.crmHealth}%`;
+        document.getElementById("responseRisk").textContent = revenue.waitingForReply;
+
+        document.getElementById("pipelineNote").textContent =
+          `${hotCount} hot leads detected. Pipeline estimate uses service value, budget, and lead quality.`;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    async function loadLeads() {
+      try {
+        const search = document.getElementById("searchInput").value.trim();
+        const status = document.getElementById("statusFilter").value;
+        const service = document.getElementById("serviceFilter").value;
+
+        const params = new URLSearchParams();
+
+        if (search) {
+          params.append("search", search);
+        }
+
+        if (status) {
+          params.append("status", status);
+        }
+
+        if (service) {
+          params.append("service", service);
+        }
+
+        const url = params.toString() ? `/leads?${params.toString()}` : "/leads";
+
+        const response = await fetch(url);
+        const result = await response.json();
+
+        const tableBody = document.getElementById("leadsTableBody");
+        tableBody.innerHTML = "";
+
+        const leads = result.data || [];
+
+        if (leads.length === 0) {
+          tableBody.innerHTML = `
+            <tr>
+              <td colspan="7">
+                <div class="empty-state">No leads found.</div>
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        leads
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .forEach((lead) => {
+            const score = calculateLeadScore(lead);
+
+            const statusBadgeClass = lead.status === "Replied" ? "badge-green" : "badge-blue";
+            const crmBadgeClass = lead.crmSynced ? "badge-green" : "badge-red";
+
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+              <td>
+                <strong>${escapeHtml(lead.name)}</strong><br>
+                <span class="muted">${escapeHtml(lead.email)}</span><br>
+                <span class="muted">${escapeHtml(lead.phone)}</span>
+              </td>
+
+              <td>
+                <span class="badge badge-blue">${escapeHtml(lead.service)}</span>
+              </td>
+
+              <td>
+                <span class="badge ${statusBadgeClass}">${escapeHtml(lead.status)}</span>
+              </td>
+
+              <td>
+                <span class="badge ${crmBadgeClass}">${lead.crmSynced ? "Synced" : "Failed"}</span>
+              </td>
+
+              <td>
+                <span class="badge ${score.className}">${score.label} ${score.score}/100</span>
+              </td>
+
+              <td>
+                <span class="muted">${escapeHtml(formatDate(lead.createdAt))}</span>
+              </td>
+
+              <td>
+                <button class="small-button" onclick="loadLeadDetails(${lead.id})">Open</button>
+              </td>
+            `;
+
+            tableBody.appendChild(row);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    function resetFilters() {
+      document.getElementById("searchInput").value = "";
+      document.getElementById("statusFilter").value = "";
+      document.getElementById("serviceFilter").value = "";
+      loadLeads();
+    }
+
+    async function loadLeadDetails(leadId) {
+      try {
+        const response = await fetch(`/leads/${leadId}`);
+        const result = await response.json();
+
+        const lead = result.data;
+        const detailsBox = document.getElementById("leadDetails");
+        const score = calculateLeadScore(lead);
+        const estimatedValue = getEstimatedDealValue(lead);
+
+        const logsHtml = lead.logs && lead.logs.length > 0
+          ? lead.logs.map((log) => {
+              return `
+                <div class="log-item">
+                  <strong>${escapeHtml(log.action)}</strong><br>
+                  <span>${escapeHtml(log.details)}</span><br>
+                  <small>${escapeHtml(formatDate(log.createdAt))}</small>
+                </div>
+              `;
+            }).join("")
+          : "<p class='muted'>No logs found.</p>";
+
+        const emailDraftBody = lead.emailDraft
+          ? lead.emailDraft.body
+          : "No email draft found.";
+
+        currentEmailDraftText = emailDraftBody;
+
+        const scoreReasons = score.reasons.length > 0
+          ? score.reasons.map((reason) => `• ${reason}`).join("\n")
+          : "No reasons available.";
+
+        detailsBox.style.display = "block";
+
+        detailsBox.innerHTML = `
+          <div class="details-header">
+            <div>
+              <h3>Lead Details</h3>
+              <div class="muted">Full lead profile, AI score, CRM status, follow-up draft, and activity timeline.</div>
+            </div>
+
+            <span class="badge ${score.className}">${score.label} Lead — ${score.score}/100</span>
+          </div>
+
+          <div class="detail-grid">
+            <div class="detail-line"><strong>Name:</strong> ${escapeHtml(lead.name)}</div>
+            <div class="detail-line"><strong>Email:</strong> ${escapeHtml(lead.email)}</div>
+            <div class="detail-line"><strong>Phone:</strong> ${escapeHtml(lead.phone)}</div>
+            <div class="detail-line"><strong>Service:</strong> ${escapeHtml(lead.service)}</div>
+            <div class="detail-line"><strong>Budget:</strong> ${escapeHtml(lead.budget)}</div>
+            <div class="detail-line"><strong>Estimated Value:</strong> ${currency.format(estimatedValue)}</div>
+            <div class="detail-line"><strong>Status:</strong> ${escapeHtml(lead.status)}</div>
+            <div class="detail-line"><strong>First Reply:</strong> ${escapeHtml(lead.firstReplySent)}</div>
+            <div class="detail-line"><strong>CRM Synced:</strong> ${lead.crmSynced ? "Yes" : "No"}</div>
+            <div class="detail-line"><strong>CRM ID:</strong> ${escapeHtml(lead.crmId || "Not synced")}</div>
+          </div>
+
+          <div class="action-row">
+            <button class="green-button" onclick="markReplySent(${lead.id})">Mark Reply Sent</button>
+            <button class="orange-button" onclick="retryCrmSync(${lead.id})">Retry CRM Sync</button>
+            <button class="purple-button" onclick="copyEmailDraft()">Copy Email Draft</button>
+            <button class="gray-button" onclick="closeLeadDetails()">Close Details</button>
+            <button class="red-button" onclick="deleteLead(${lead.id})">Delete Lead</button>
+          </div>
+
+          <div class="section-title">AI Lead Score Reasoning</div>
+          <div class="panel">${escapeHtml(scoreReasons)}</div>
+
+          <div class="section-title">Business Impact</div>
+          <div class="panel">Estimated opportunity value: ${currency.format(estimatedValue)}
+Lead quality: ${score.label} ${score.score}/100
+Recommended next step: ${score.label === "Hot" ? "Call this lead immediately." : score.label === "Warm" ? "Follow up today with a personalized message." : "Add to nurture sequence."}</div>
+
+          <div class="section-title">AI Summary</div>
+          <div class="panel">${escapeHtml(lead.summary)}</div>
+
+          <div class="section-title">Email Draft</div>
+          <div class="panel">${escapeHtml(emailDraftBody)}</div>
+
+          <div class="section-title">Activity Logs</div>
+          ${logsHtml}
+        `;
+
+        detailsBox.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    async function markReplySent(leadId) {
+      try {
+        const response = await fetch(`/leads/${leadId}/reply-sent`, {
+          method: "PUT"
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          showMessage("Reply marked as sent successfully.", "success");
+          await refreshAll();
+          await loadLeadDetails(leadId);
+        } else {
+          showMessage(result.message || "Failed to update reply status.", "error");
+        }
+      } catch (error) {
+        showMessage("Server error while marking reply as sent.", "error");
+      }
+    }
+
+    async function retryCrmSync(leadId) {
+      try {
+        const response = await fetch(`/leads/${leadId}/retry-crm`, {
+          method: "POST"
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          showMessage(result.message || "CRM sync checked successfully.", "success");
+          await refreshAll();
+          await loadLeadDetails(leadId);
+        } else {
+          showMessage(result.message || "CRM retry failed.", "error");
+          await loadLeadDetails(leadId);
+        }
+      } catch (error) {
+        showMessage("Server error while retrying CRM sync.", "error");
+      }
+    }
+
+    async function copyEmailDraft() {
+      if (!currentEmailDraftText) {
+        showMessage("No email draft available to copy.", "error");
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(currentEmailDraftText);
+        showMessage("Email draft copied successfully.", "success");
+      } catch (error) {
+        const tempTextArea = document.createElement("textarea");
+        tempTextArea.value = currentEmailDraftText;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempTextArea);
+
+        showMessage("Email draft copied successfully.", "success");
+      }
+    }
+
+    function closeLeadDetails() {
+      const detailsBox = document.getElementById("leadDetails");
+      detailsBox.style.display = "none";
+      detailsBox.innerHTML = "";
+      currentEmailDraftText = "";
+      showMessage("Lead details closed.", "success");
+    }
+
+    function csvEscape(value) {
+      if (value === null || value === undefined) {
+        return "";
+      }
+
+      const stringValue = String(value).replaceAll('"', '""');
+
+      return `"${stringValue}"`;
+    }
+
+    async function exportLeadsCsv() {
+      try {
+        const response = await fetch("/leads");
+        const result = await response.json();
+
+        const leads = result.data || [];
+
+        if (leads.length === 0) {
+          showMessage("No leads available to export.", "error");
+          return;
+        }
+
+        const headers = [
+          "ID",
+          "Name",
+          "Email",
+          "Phone",
+          "Service",
+          "Budget",
+          "Best Time To Contact",
+          "Status",
+          "First Reply Sent",
+          "CRM Synced",
+          "CRM ID",
+          "Lead Score",
+          "Lead Score Label",
+          "Estimated Deal Value",
+          "Created At"
+        ];
+
+        const rows = leads.map((lead) => {
+          const score = calculateLeadScore(lead);
+
+          return [
+            lead.id,
+            lead.name,
+            lead.email,
+            lead.phone,
+            lead.service,
+            lead.budget,
+            lead.bestTimeToContact,
+            lead.status,
+            lead.firstReplySent,
+            lead.crmSynced ? "Yes" : "No",
+            lead.crmId || "",
+            score.score,
+            score.label,
+            getEstimatedDealValue(lead),
+            lead.createdAt
+          ];
+        });
+
+        const csvContent = [
+          headers,
+          ...rows
+        ]
+          .map((row) => row.map(csvEscape).join(","))
+          .join("\n");
+
+        const blob = new Blob([csvContent], {
+          type: "text/csv;charset=utf-8;"
+        });
+
+        const url = URL.createObjectURL(blob);
+
+        const downloadLink = document.createElement("a");
+        downloadLink.href = url;
+        downloadLink.download = `leadflow-leads-${new Date().toISOString().slice(0, 10)}.csv`;
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+        URL.revokeObjectURL(url);
+
+        showMessage("Leads exported successfully as CSV.", "success");
+      } catch (error) {
+        showMessage("Failed to export leads.", "error");
+      }
+    }
+
+    async function deleteLead(leadId) {
+      const confirmed = confirm("Are you sure you want to delete this lead?");
+
+      if (!confirmed) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/leads/${leadId}`, {
+          method: "DELETE"
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          showMessage("Lead deleted successfully.", "success");
+          document.getElementById("leadDetails").style.display = "none";
+          document.getElementById("leadDetails").innerHTML = "";
+          currentEmailDraftText = "";
+          await refreshAll();
+        } else {
+          showMessage(result.message || "Failed to delete lead.", "error");
+        }
+      } catch (error) {
+        showMessage("Server error while deleting lead.", "error");
+      }
+    }
+
+    leadForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const leadData = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        service: document.getElementById("service").value,
+        budget: document.getElementById("budget").value,
+        bestTimeToContact: document.getElementById("bestTimeToContact").value,
+        notes: document.getElementById("notes").value
+      };
+
+      try {
+        const response = await fetch("/webhook/lead", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(leadData)
+        });
+
+        const result = await response.json();
+
+        if (response.status === 201) {
+          showMessage("Lead submitted successfully, scored, and synced to CRM.", "success");
+          leadForm.reset();
+          await refreshAll();
+        } else if (response.status === 409) {
+          showMessage("Duplicate blocked: this lead already exists.", "error");
+          await refreshAll();
+        } else {
+          showMessage(result.message || "Something went wrong.", "error");
+        }
+      } catch (error) {
+        showMessage("Server error. Please make sure the backend is running.", "error");
+      }
+    });
+
+    document.getElementById("searchInput").addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        loadLeads();
+      }
+    });
+
+    async function refreshAll() {
+      await loadDashboard();
+      await loadLeads();
+    }
+
+    refreshAll();
+  </script>
+</body>
+</html>

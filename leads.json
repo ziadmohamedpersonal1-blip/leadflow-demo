@@ -1,0 +1,192 @@
+[
+  {
+    "id": 1,
+    "name": "Sarah Johnson",
+    "email": "sarah.johnson@example.com",
+    "phone": "+1 404 555 0131",
+    "service": "Web Design",
+    "budget": "2500",
+    "bestTimeToContact": "ASAP",
+    "notes": "Needs a new website for a local home services business.",
+    "status": "New Lead",
+    "firstReplySent": "No",
+    "summary": "Sarah Johnson requested Web Design. Phone: +1 404 555 0131. Status: New Lead.",
+    "emailDraft": {
+      "to": "sarah.johnson@example.com",
+      "subject": "We received your request",
+      "body": "Hi Sarah Johnson,\n\nThanks for contacting us about Web Design.\n\nWe received your request and our team will contact you soon.\n\nBest,\nCompany Team"
+    },
+    "crmSynced": true,
+    "crmId": 1,
+    "crmError": null,
+    "logs": [
+      {
+        "action": "Lead received",
+        "details": "New lead data received from website form",
+        "createdAt": "2026-06-12T09:00:00.000Z"
+      },
+      {
+        "action": "Lead validated",
+        "details": "Required fields and email format are valid",
+        "createdAt": "2026-06-12T09:00:02.000Z"
+      },
+      {
+        "action": "CRM sync successful",
+        "details": "Lead sent to CRM with CRM ID: 1",
+        "createdAt": "2026-06-12T09:00:05.000Z"
+      }
+    ],
+    "createdAt": "2026-06-12T09:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "name": "Michael Carter",
+    "email": "michael.carter@example.com",
+    "phone": "+1 720 555 0188",
+    "service": "SEO",
+    "budget": "900",
+    "bestTimeToContact": "Morning",
+    "notes": "Wants more organic leads for his local service company.",
+    "status": "Replied",
+    "firstReplySent": "Yes",
+    "summary": "Michael Carter requested SEO. Phone: +1 720 555 0188. Status: Replied.",
+    "emailDraft": {
+      "to": "michael.carter@example.com",
+      "subject": "We received your request",
+      "body": "Hi Michael Carter,\n\nThanks for contacting us about SEO.\n\nWe received your request and our team will contact you soon.\n\nBest,\nCompany Team"
+    },
+    "crmSynced": true,
+    "crmId": 2,
+    "crmError": null,
+    "logs": [
+      {
+        "action": "Lead received",
+        "details": "New lead data received from website form",
+        "createdAt": "2026-06-12T09:15:00.000Z"
+      },
+      {
+        "action": "Email draft generated",
+        "details": "Automatic follow-up email draft created",
+        "createdAt": "2026-06-12T09:15:03.000Z"
+      },
+      {
+        "action": "First reply sent",
+        "details": "First reply was marked as sent and status changed to Replied",
+        "createdAt": "2026-06-12T09:20:00.000Z"
+      }
+    ],
+    "createdAt": "2026-06-12T09:15:00.000Z"
+  },
+  {
+    "id": 3,
+    "name": "Emily Roberts",
+    "email": "emily.roberts@example.com",
+    "phone": "+1 303 555 0144",
+    "service": "Landscaping",
+    "budget": "4200",
+    "bestTimeToContact": "Today",
+    "notes": "Looking for a backyard redesign and patio installation.",
+    "status": "New Lead",
+    "firstReplySent": "No",
+    "summary": "Emily Roberts requested Landscaping. Phone: +1 303 555 0144. Status: New Lead.",
+    "emailDraft": {
+      "to": "emily.roberts@example.com",
+      "subject": "We received your request",
+      "body": "Hi Emily Roberts,\n\nThanks for contacting us about Landscaping.\n\nWe received your request and our team will contact you soon.\n\nBest,\nCompany Team"
+    },
+    "crmSynced": true,
+    "crmId": 3,
+    "crmError": null,
+    "logs": [
+      {
+        "action": "Lead received",
+        "details": "New lead data received from landing page",
+        "createdAt": "2026-06-12T09:30:00.000Z"
+      },
+      {
+        "action": "CRM sync successful",
+        "details": "Lead sent to CRM with CRM ID: 3",
+        "createdAt": "2026-06-12T09:30:04.000Z"
+      },
+      {
+        "action": "Duplicate lead blocked",
+        "details": "Duplicate submission detected for email: emily.roberts@example.com",
+        "createdAt": "2026-06-12T09:35:00.000Z"
+      }
+    ],
+    "createdAt": "2026-06-12T09:30:00.000Z"
+  },
+  {
+    "id": 4,
+    "name": "David Miller",
+    "email": "david.miller@example.com",
+    "phone": "+1 678 555 0119",
+    "service": "Home Cleaning",
+    "budget": "250",
+    "bestTimeToContact": "Next week",
+    "notes": "Interested in a one-time cleaning service.",
+    "status": "New Lead",
+    "firstReplySent": "No",
+    "summary": "David Miller requested Home Cleaning. Phone: +1 678 555 0119. Status: New Lead.",
+    "emailDraft": {
+      "to": "david.miller@example.com",
+      "subject": "We received your request",
+      "body": "Hi David Miller,\n\nThanks for contacting us about Home Cleaning.\n\nWe received your request and our team will contact you soon.\n\nBest,\nCompany Team"
+    },
+    "crmSynced": false,
+    "crmId": null,
+    "crmError": "CRM connection timeout",
+    "logs": [
+      {
+        "action": "Lead received",
+        "details": "New lead data received from website form",
+        "createdAt": "2026-06-12T09:45:00.000Z"
+      },
+      {
+        "action": "CRM sync failed",
+        "details": "CRM connection timeout",
+        "createdAt": "2026-06-12T09:45:04.000Z"
+      }
+    ],
+    "createdAt": "2026-06-12T09:45:00.000Z"
+  },
+  {
+    "id": 5,
+    "name": "Amanda Wilson",
+    "email": "amanda.wilson@example.com",
+    "phone": "+1 470 555 0166",
+    "service": "Social Media Management",
+    "budget": "1200",
+    "bestTimeToContact": "Afternoon",
+    "notes": "Needs monthly content and lead generation support.",
+    "status": "New Lead",
+    "firstReplySent": "No",
+    "summary": "Amanda Wilson requested Social Media Management. Phone: +1 470 555 0166. Status: New Lead.",
+    "emailDraft": {
+      "to": "amanda.wilson@example.com",
+      "subject": "We received your request",
+      "body": "Hi Amanda Wilson,\n\nThanks for contacting us about Social Media Management.\n\nWe received your request and our team will contact you soon.\n\nBest,\nCompany Team"
+    },
+    "crmSynced": true,
+    "crmId": 4,
+    "crmError": null,
+    "logs": [
+      {
+        "action": "Lead received",
+        "details": "New lead data received from ad campaign",
+        "createdAt": "2026-06-12T10:00:00.000Z"
+      },
+      {
+        "action": "Email draft generated",
+        "details": "Automatic follow-up email draft created",
+        "createdAt": "2026-06-12T10:00:03.000Z"
+      },
+      {
+        "action": "CRM sync successful",
+        "details": "Lead sent to CRM with CRM ID: 4",
+        "createdAt": "2026-06-12T10:00:05.000Z"
+      }
+    ],
+    "createdAt": "2026-06-12T10:00:00.000Z"
+  }
+]

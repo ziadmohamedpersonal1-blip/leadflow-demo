@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "name": "Sarah Johnson",
+    "email": "sarah.johnson@example.com",
+    "phone": "+1 404 555 0131",
+    "service": "Web Design",
+    "summary": "Sarah Johnson requested Web Design. Phone: +1 404 555 0131. Status: New Lead.",
+    "sourceLeadId": 1,
+    "crmStatus": "Created",
+    "createdAt": "2026-06-12T09:00:05.000Z"
+  },
+  {
+    "id": 2,
+    "name": "Michael Carter",
+    "email": "michael.carter@example.com",
+    "phone": "+1 720 555 0188",
+    "service": "SEO",
+    "summary": "Michael Carter requested SEO. Phone: +1 720 555 0188. Status: Replied.",
+    "sourceLeadId": 2,
+    "crmStatus": "Created",
+    "createdAt": "2026-06-12T09:15:05.000Z"
+  },
+  {
+    "id": 3,
+    "name": "Emily Roberts",
+    "email": "emily.roberts@example.com",
+    "phone": "+1 303 555 0144",
+    "service": "Landscaping",
+    "summary": "Emily Roberts requested Landscaping. Phone: +1 303 555 0144. Status: New Lead.",
+    "sourceLeadId": 3,
+    "crmStatus": "Created",
+    "createdAt": "2026-06-12T09:30:05.000Z"
+  },
+  {
+    "id": 4,
+    "name": "Amanda Wilson",
+    "email": "amanda.wilson@example.com",
+    "phone": "+1 470 555 0166",
+    "service": "Social Media Management",
+    "summary": "Amanda Wilson requested Social Media Management. Phone: +1 470 555 0166. Status: New Lead.",
+    "sourceLeadId": 5,
+    "crmStatus": "Created",
+    "createdAt": "2026-06-12T10:00:05.000Z"
+  }
+]
