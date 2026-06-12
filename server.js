@@ -1,15 +1,30 @@
+require("dotenv").config();
+
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
+const nodemailer = require("nodemailer");
+const axios = require("axios");
 
 const app = express();
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+const emailTransporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
 // File paths
 const leadsFilePath = path.join(__dirname, "leads.json");
-const crmFilePath = path.join(__dirname, "fake-crm.json");
 
 // Load JSON file
 function loadJsonFile(filePath) {
@@ -35,18 +50,12 @@ function saveJsonFile(filePath, data) {
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 }
 
-// Databases loaded from files
+// Database loaded from file
 let leads = loadJsonFile(leadsFilePath);
-let crmContacts = loadJsonFile(crmFilePath);
 
 // Save leads
 function saveLeads() {
   saveJsonFile(leadsFilePath, leads);
-}
-
-// Save CRM contacts
-function saveCrmContacts() {
-  saveJsonFile(crmFilePath, crmContacts);
 }
 
 // Generate next lead ID
@@ -56,16 +65,6 @@ function getNextLeadId() {
   }
 
   const ids = leads.map((lead) => lead.id);
-  return Math.max(...ids) + 1;
-}
-
-// Generate next CRM contact ID
-function getNextCrmId() {
-  if (crmContacts.length === 0) {
-    return 1;
-  }
-
-  const ids = crmContacts.map((contact) => contact.id);
   return Math.max(...ids) + 1;
 }
 
@@ -83,7 +82,7 @@ function addLog(lead, action, details) {
   lead.logs.push({
     action: action,
     details: details,
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   });
 }
 
@@ -104,37 +103,123 @@ Thanks for contacting us about ${lead.service}.
 We received your request and our team will contact you soon.
 
 Best,
-Company Team`
+Company Team`,
   };
 }
 
-// Send lead to local fake CRM API
-async function sendLeadToLocalFakeCRM(lead) {
-  const response = await fetch("http://localhost:3000/fake-crm/contacts", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      name: lead.name,
-      email: lead.email,
-      phone: lead.phone,
-      service: lead.service,
-      summary: lead.summary,
-      sourceLeadId: lead.id
-    })
-  });
+// Split full name for HubSpot firstname / lastname
+function splitFullName(fullName) {
+  const cleanName = String(fullName || "").trim();
 
-  if (!response.ok) {
-    throw new Error(`CRM API failed with status ${response.status}`);
+  if (!cleanName) {
+    return {
+      firstname: "Unknown",
+      lastname: "",
+    };
   }
 
-  const data = await response.json();
+  const nameParts = cleanName.split(" ").filter(Boolean);
+
+  return {
+    firstname: nameParts[0] || cleanName,
+    lastname: nameParts.slice(1).join(" "),
+  };
+}
+
+// Search HubSpot contact by email
+async function findHubSpotContactByEmail(email) {
+  const response = await axios.post(
+    "https://api.hubapi.com/crm/v3/objects/contacts/search",
+    {
+      filterGroups: [
+        {
+          filters: [
+            {
+              propertyName: "email",
+              operator: "EQ",
+              value: email,
+            },
+          ],
+        },
+      ],
+      properties: ["email", "firstname", "lastname", "phone"],
+      limit: 1,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (response.data.results && response.data.results.length > 0) {
+    return response.data.results[0];
+  }
+
+  return null;
+}
+
+// Send lead to HubSpot CRM
+async function sendLeadToHubSpotCRM(lead) {
+  if (!process.env.HUBSPOT_ACCESS_TOKEN) {
+    throw new Error("Missing HUBSPOT_ACCESS_TOKEN in .env file");
+  }
+
+  const name = splitFullName(lead.name);
+
+  const hubspotProperties = {
+    email: lead.email,
+    firstname: name.firstname,
+    lastname: name.lastname,
+    phone: lead.phone || "",
+    lifecyclestage: "lead",
+  };
+
+  const existingContact = await findHubSpotContactByEmail(lead.email);
+
+  if (existingContact) {
+    const updateResponse = await axios.patch(
+      `https://api.hubapi.com/crm/v3/objects/contacts/${existingContact.id}`,
+      {
+        properties: hubspotProperties,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return {
+      crmSynced: true,
+      crmId: updateResponse.data.id,
+      crmProvider: "HubSpot",
+      crmAction: "updated",
+      crmResponse: updateResponse.data,
+    };
+  }
+
+  const createResponse = await axios.post(
+    "https://api.hubapi.com/crm/v3/objects/contacts",
+    {
+      properties: hubspotProperties,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
   return {
     crmSynced: true,
-    crmId: data.data.id,
-    crmResponse: data
+    crmId: createResponse.data.id,
+    crmProvider: "HubSpot",
+    crmAction: "created",
+    crmResponse: createResponse.data,
   };
 }
 
@@ -142,7 +227,7 @@ async function sendLeadToLocalFakeCRM(lead) {
 app.get("/health", (req, res) => {
   res.json({
     status: "OK",
-    message: "Server is running"
+    message: "Server is running",
   });
 });
 
@@ -151,11 +236,8 @@ app.get("/dashboard", (req, res) => {
   const totalLeads = leads.length;
 
   const newLeads = leads.filter((lead) => lead.status === "New Lead").length;
-
   const repliedLeads = leads.filter((lead) => lead.status === "Replied").length;
-
   const crmSyncedLeads = leads.filter((lead) => lead.crmSynced === true).length;
-
   const crmFailedLeads = leads.filter((lead) => lead.crmSynced === false).length;
 
   const duplicateBlocked = leads.reduce((total, lead) => {
@@ -189,78 +271,15 @@ app.get("/dashboard", (req, res) => {
   res.json({
     success: true,
     data: {
-      totalLeads: totalLeads,
-      newLeads: newLeads,
-      repliedLeads: repliedLeads,
-      crmSyncedLeads: crmSyncedLeads,
-      crmFailedLeads: crmFailedLeads,
-      duplicateBlocked: duplicateBlocked,
-      leadsByService: leadsByService,
-      latestLeads: latestLeads
-    }
-  });
-});
-
-// -------------------- FAKE CRM ROUTES --------------------
-
-// Get all CRM contacts
-app.get("/fake-crm/contacts", (req, res) => {
-  res.json({
-    success: true,
-    count: crmContacts.length,
-    data: crmContacts
-  });
-});
-
-// Get one CRM contact
-app.get("/fake-crm/contacts/:id", (req, res) => {
-  const contactId = Number(req.params.id);
-
-  const contact = crmContacts.find((contact) => contact.id === contactId);
-
-  if (!contact) {
-    return res.status(404).json({
-      success: false,
-      message: "CRM contact not found"
-    });
-  }
-
-  res.json({
-    success: true,
-    data: contact
-  });
-});
-
-// Create CRM contact
-app.post("/fake-crm/contacts", (req, res) => {
-  const contact = req.body;
-
-  if (!contact.name || !contact.email || !contact.phone) {
-    return res.status(400).json({
-      success: false,
-      message: "Missing required CRM contact data"
-    });
-  }
-
-  const newContact = {
-    id: getNextCrmId(),
-    name: contact.name,
-    email: contact.email,
-    phone: contact.phone,
-    service: contact.service || "Not provided",
-    summary: contact.summary || "Not provided",
-    sourceLeadId: contact.sourceLeadId || null,
-    crmStatus: "Created",
-    createdAt: new Date().toISOString()
-  };
-
-  crmContacts.push(newContact);
-  saveCrmContacts();
-
-  res.status(201).json({
-    success: true,
-    message: "CRM contact created successfully",
-    data: newContact
+      totalLeads,
+      newLeads,
+      repliedLeads,
+      crmSyncedLeads,
+      crmFailedLeads,
+      duplicateBlocked,
+      leadsByService,
+      latestLeads,
+    },
   });
 });
 
@@ -313,9 +332,9 @@ app.get("/leads", (req, res) => {
       status: status || null,
       service: service || null,
       email: email || null,
-      search: search || null
+      search: search || null,
     },
-    data: filteredLeads
+    data: filteredLeads,
   });
 });
 
@@ -328,13 +347,13 @@ app.get("/leads/:id", (req, res) => {
   if (!lead) {
     return res.status(404).json({
       success: false,
-      message: "Lead not found"
+      message: "Lead not found",
     });
   }
 
   res.json({
     success: true,
-    data: lead
+    data: lead,
   });
 });
 
@@ -347,14 +366,14 @@ app.get("/leads/:id/logs", (req, res) => {
   if (!lead) {
     return res.status(404).json({
       success: false,
-      message: "Lead not found"
+      message: "Lead not found",
     });
   }
 
   res.json({
     success: true,
     count: lead.logs ? lead.logs.length : 0,
-    data: lead.logs || []
+    data: lead.logs || [],
   });
 });
 
@@ -367,24 +386,24 @@ app.get("/leads/:id/email-draft", (req, res) => {
   if (!lead) {
     return res.status(404).json({
       success: false,
-      message: "Lead not found"
+      message: "Lead not found",
     });
   }
 
   res.json({
     success: true,
-    data: lead.emailDraft
+    data: lead.emailDraft,
   });
 });
 
-// Receive, validate, check duplicate, save, and send new lead to local fake CRM
+// Receive, validate, check duplicate, save, and send new lead to HubSpot CRM
 app.post("/webhook/lead", async (req, res) => {
   const lead = req.body;
 
   if (!lead.name || !lead.email || !lead.phone || !lead.service) {
     return res.status(400).json({
       success: false,
-      message: "Missing required lead data"
+      message: "Missing required lead data",
     });
   }
 
@@ -394,7 +413,7 @@ app.post("/webhook/lead", async (req, res) => {
     return res.status(400).json({
       success: false,
       message: "Invalid email address",
-      status: "Invalid Email"
+      status: "Invalid Email",
     });
   }
 
@@ -412,7 +431,7 @@ app.post("/webhook/lead", async (req, res) => {
       success: false,
       message: "Lead already exists",
       existingLeadId: existingLead.id,
-      data: existingLead
+      data: existingLead,
     });
   }
 
@@ -431,8 +450,10 @@ app.post("/webhook/lead", async (req, res) => {
     crmSynced: false,
     crmId: null,
     crmError: null,
+    emailSent: false,
+    emailSentAt: null,
     logs: [],
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   };
 
   addLog(processedLead, "Lead received", "New lead data received from webhook");
@@ -445,16 +466,16 @@ app.post("/webhook/lead", async (req, res) => {
   processedLead.emailDraft = generateEmailDraft(processedLead);
   addLog(processedLead, "Email draft generated", "Automatic email draft created for the lead");
 
-  addLog(processedLead, "CRM sync attempted", "Trying to send lead to local fake CRM API");
+  addLog(processedLead, "CRM sync attempted", "Trying to send lead to HubSpot CRM");
 
   try {
-    const crmResult = await sendLeadToLocalFakeCRM(processedLead);
+    const crmResult = await sendLeadToHubSpotCRM(processedLead);
 
     processedLead.crmSynced = crmResult.crmSynced;
     processedLead.crmId = crmResult.crmId;
     processedLead.crmError = null;
 
-    addLog(processedLead, "CRM sync successful", `Lead sent to local fake CRM with CRM ID: ${crmResult.crmId}`);
+    addLog(processedLead, "CRM sync successful", `Lead sent to HubSpot CRM with CRM ID: ${crmResult.crmId}`);
   } catch (error) {
     processedLead.crmSynced = false;
     processedLead.crmError = error.message;
@@ -474,7 +495,7 @@ app.post("/webhook/lead", async (req, res) => {
   res.status(201).json({
     success: true,
     message: "Lead validated, duplicate checked, saved, email draft generated, CRM sync attempted, and logs created",
-    data: processedLead
+    data: processedLead,
   });
 });
 
@@ -488,14 +509,14 @@ app.put("/leads/:id/status", (req, res) => {
   if (!lead) {
     return res.status(404).json({
       success: false,
-      message: "Lead not found"
+      message: "Lead not found",
     });
   }
 
   if (!newStatus) {
     return res.status(400).json({
       success: false,
-      message: "Status is required"
+      message: "Status is required",
     });
   }
 
@@ -511,7 +532,7 @@ app.put("/leads/:id/status", (req, res) => {
   res.json({
     success: true,
     message: "Lead status updated successfully",
-    data: lead
+    data: lead,
   });
 });
 
@@ -524,7 +545,7 @@ app.put("/leads/:id/reply-sent", (req, res) => {
   if (!lead) {
     return res.status(404).json({
       success: false,
-      message: "Lead not found"
+      message: "Lead not found",
     });
   }
 
@@ -539,8 +560,96 @@ app.put("/leads/:id/reply-sent", (req, res) => {
   res.json({
     success: true,
     message: "Lead marked as replied successfully",
-    data: lead
+    data: lead,
   });
+});
+
+// Send real email to one lead
+app.post("/leads/:id/send-email", async (req, res) => {
+  try {
+    const leadId = Number(req.params.id);
+
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      return res.status(500).json({
+        success: false,
+        message: "Email credentials are missing. Check .env file.",
+      });
+    }
+
+    const lead = leads.find((lead) => lead.id === leadId);
+
+    if (!lead) {
+      return res.status(404).json({
+        success: false,
+        message: "Lead not found",
+      });
+    }
+
+    if (!lead.email) {
+      return res.status(400).json({
+        success: false,
+        message: "Lead has no email address",
+      });
+    }
+
+    let emailSubject = `Thanks ${lead.name || "there"} — we received your request`;
+    let emailBody = "";
+
+    if (typeof lead.emailDraft === "string") {
+      emailBody = lead.emailDraft;
+    } else if (lead.emailDraft && typeof lead.emailDraft === "object") {
+      emailSubject =
+        lead.emailDraft.subject ||
+        lead.emailDraft.emailSubject ||
+        emailSubject;
+
+      emailBody =
+        lead.emailDraft.body ||
+        lead.emailDraft.text ||
+        lead.emailDraft.message ||
+        JSON.stringify(lead.emailDraft, null, 2);
+    } else {
+      emailBody = `Hi ${lead.name || "there"},
+
+Thanks for reaching out.
+
+We received your request and our team will review it shortly.
+
+Best regards,
+LeadFlow Team`;
+    }
+
+    await emailTransporter.sendMail({
+      from: `"LeadFlow Command Center" <${process.env.EMAIL_USER}>`,
+      to: lead.email,
+      subject: String(emailSubject),
+      text: String(emailBody),
+    });
+
+    lead.emailSent = true;
+    lead.emailSentAt = new Date().toISOString();
+    lead.firstReplySent = "Yes";
+    lead.status = "Replied";
+    lead.summary = generateSummary(lead);
+
+    addLog(lead, "Email sent to lead", `Real email sent to ${lead.email}`);
+
+    saveLeads();
+
+    res.json({
+      success: true,
+      message: "Email sent successfully",
+      data: lead,
+    });
+  } catch (error) {
+    console.error("Send email error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to send email",
+      error: error.message,
+    });
+  }
 });
 
 // Retry CRM sync for one lead
@@ -552,7 +661,7 @@ app.post("/leads/:id/retry-crm", async (req, res) => {
   if (!lead) {
     return res.status(404).json({
       success: false,
-      message: "Lead not found"
+      message: "Lead not found",
     });
   }
 
@@ -563,27 +672,27 @@ app.post("/leads/:id/retry-crm", async (req, res) => {
     return res.json({
       success: true,
       message: "Lead is already synced with CRM",
-      data: lead
+      data: lead,
     });
   }
 
-  addLog(lead, "CRM retry attempted", "Trying to sync lead with local fake CRM again");
+  addLog(lead, "CRM retry attempted", "Trying to sync lead with HubSpot CRM again");
 
   try {
-    const crmResult = await sendLeadToLocalFakeCRM(lead);
+    const crmResult = await sendLeadToHubSpotCRM(lead);
 
     lead.crmSynced = crmResult.crmSynced;
     lead.crmId = crmResult.crmId;
     lead.crmError = null;
 
-    addLog(lead, "CRM retry successful", `Lead synced with local fake CRM ID: ${crmResult.crmId}`);
+    addLog(lead, "CRM retry successful", `Lead synced with HubSpot CRM ID: ${crmResult.crmId}`);
 
     saveLeads();
 
     res.json({
       success: true,
       message: "CRM retry successful",
-      data: lead
+      data: lead,
     });
   } catch (error) {
     lead.crmSynced = false;
@@ -596,7 +705,7 @@ app.post("/leads/:id/retry-crm", async (req, res) => {
     res.status(502).json({
       success: false,
       message: "CRM retry failed",
-      data: lead
+      data: lead,
     });
   }
 });
@@ -610,7 +719,7 @@ app.delete("/leads/:id", (req, res) => {
   if (leadIndex === -1) {
     return res.status(404).json({
       success: false,
-      message: "Lead not found"
+      message: "Lead not found",
     });
   }
 
@@ -625,7 +734,7 @@ app.delete("/leads/:id", (req, res) => {
   res.json({
     success: true,
     message: "Lead deleted successfully",
-    data: deletedLead[0]
+    data: deletedLead[0],
   });
 });
 

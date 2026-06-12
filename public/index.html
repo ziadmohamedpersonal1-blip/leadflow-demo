@@ -6,161 +6,319 @@
   <title>LeadFlow Command Center</title>
 
   <style>
+    :root {
+      --bg: #020617;
+      --bg-soft: #07111f;
+      --card: rgba(15, 23, 42, 0.94);
+      --card-strong: #0f172a;
+      --border: rgba(148, 163, 184, 0.22);
+      --border-strong: rgba(56, 189, 248, 0.45);
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --muted-2: #64748b;
+      --blue: #38bdf8;
+      --blue-dark: #2563eb;
+      --green: #10b981;
+      --orange: #f59e0b;
+      --red: #ef4444;
+      --purple: #8b5cf6;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+      --radius: 18px;
+    }
+
     * {
       box-sizing: border-box;
-      font-family: Inter, Arial, sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
       margin: 0;
-      background: #020617;
-      color: #e5e7eb;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(14, 165, 233, 0.18), transparent 28%),
+        radial-gradient(circle at 85% 8%, rgba(139, 92, 246, 0.16), transparent 26%),
+        linear-gradient(180deg, #020617 0%, #050b17 44%, #020617 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
     }
 
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      padding: 11px 14px;
+      transition: transform 0.18s ease, filter 0.18s ease, background 0.18s ease, opacity 0.18s ease;
+      white-space: nowrap;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.08);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.58;
+      transform: none;
+      filter: none;
+    }
+
+    .btn-primary { background: linear-gradient(135deg, #2563eb, #0891b2); }
+    .btn-green { background: linear-gradient(135deg, #047857, #10b981); }
+    .btn-orange { background: linear-gradient(135deg, #b45309, #f59e0b); }
+    .btn-red { background: linear-gradient(135deg, #b91c1c, #ef4444); }
+    .btn-purple { background: linear-gradient(135deg, #6d28d9, #8b5cf6); }
+    .btn-gray { background: #475569; }
+
     .container {
-      width: 96%;
-      max-width: 1500px;
+      width: min(96%, 1520px);
       margin: 0 auto;
-      padding: 28px 0;
+      padding: 28px 0 44px;
     }
 
     .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 18px;
       margin-bottom: 18px;
-      gap: 16px;
     }
 
     .brand {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
     }
 
     .brand h1 {
       margin: 0;
-      font-size: 30px;
-      letter-spacing: -0.5px;
+      font-size: clamp(26px, 3vw, 38px);
+      line-height: 1.05;
+      letter-spacing: -1px;
     }
 
     .brand span {
-      color: #94a3b8;
+      color: var(--muted);
       font-size: 14px;
+      line-height: 1.5;
     }
 
     .top-actions {
       display: flex;
-      gap: 10px;
       align-items: center;
       flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
     }
 
     .pill {
-      background: #082f49;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(8, 47, 73, 0.78);
       color: #7dd3fc;
-      border: 1px solid #0ea5e9;
-      padding: 8px 12px;
+      border: 1px solid rgba(14, 165, 233, 0.7);
+      padding: 9px 12px;
       border-radius: 999px;
       font-size: 13px;
-      font-weight: bold;
+      font-weight: 900;
       white-space: nowrap;
+    }
+
+    .pill::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 14px #22c55e;
     }
 
     .hero {
       display: grid;
-      grid-template-columns: 1.3fr 0.7fr;
+      grid-template-columns: minmax(0, 1.28fr) minmax(320px, 0.72fr);
       gap: 18px;
-      background: radial-gradient(circle at top left, #1e3a8a, #111827 45%, #020617);
-      border: 1px solid #334155;
-      border-radius: 22px;
+      border: 1px solid var(--border);
+      border-radius: 26px;
       padding: 26px;
       margin-bottom: 18px;
+      align-items: stretch;
+      background:
+        linear-gradient(135deg, rgba(30, 58, 138, 0.9), rgba(15, 23, 42, 0.92) 48%, rgba(2, 6, 23, 0.94)),
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 36%);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -70px -90px auto;
+      width: 260px;
+      height: 260px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      filter: blur(4px);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .eyebrow {
+      width: fit-content;
+      display: inline-flex;
       align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(2, 6, 23, 0.55);
+      border: 1px solid rgba(125, 211, 252, 0.25);
+      color: #bfdbfe;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
     }
 
     .hero h2 {
-      margin: 0 0 8px;
-      font-size: 30px;
-      letter-spacing: -0.5px;
+      margin: 0 0 10px;
+      font-size: clamp(30px, 4vw, 52px);
+      line-height: 1.03;
+      letter-spacing: -1.4px;
+      max-width: 920px;
     }
 
     .hero p {
       margin: 0;
       color: #cbd5e1;
-      line-height: 1.6;
-      max-width: 850px;
+      line-height: 1.7;
+      max-width: 900px;
       font-size: 16px;
     }
 
+    .hero-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .hero-list span {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(2, 6, 23, 0.45);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      color: #dbeafe;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
     .hero-revenue-card {
-      background: rgba(2, 6, 23, 0.72);
-      border: 1px solid #38bdf8;
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: 0 0 28px rgba(56, 189, 248, 0.08);
+      position: relative;
+      z-index: 1;
+      background: rgba(2, 6, 23, 0.74);
+      border: 1px solid var(--border-strong);
+      border-radius: 22px;
+      padding: 20px;
+      box-shadow: 0 0 40px rgba(56, 189, 248, 0.09);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .revenue-label {
       color: #93c5fd;
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 900;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 6px;
+      letter-spacing: 0.55px;
+      margin-bottom: 7px;
     }
 
     .revenue-number {
-      font-size: 38px;
-      font-weight: 900;
-      color: #38bdf8;
-      margin-bottom: 8px;
+      font-size: clamp(34px, 4vw, 48px);
+      font-weight: 950;
+      color: var(--blue);
+      margin-bottom: 10px;
+      letter-spacing: -1px;
     }
 
     .revenue-note {
       color: #cbd5e1;
       font-size: 13px;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
-    .sales-grid {
+    .sales-grid,
+    .impact-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 14px;
       margin-bottom: 18px;
     }
 
+    .sales-card,
+    .impact-card,
+    .kpi,
+    .card,
+    .before-box,
+    .after-box,
+    .integrations-bar {
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.18);
+    }
+
     .sales-card {
-      background: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 16px;
-      padding: 16px;
+      border-radius: 18px;
+      padding: 17px;
     }
 
     .sales-card h4 {
-      margin: 0 0 7px;
+      margin: 0 0 8px;
       font-size: 16px;
       color: #f8fafc;
     }
 
     .sales-card p {
       margin: 0;
-      color: #94a3b8;
+      color: var(--muted);
       font-size: 13px;
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
     .sales-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: #1e3a8a;
-      color: #bfdbfe;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.9), rgba(8, 145, 178, 0.85));
+      color: #e0f2fe;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 900;
-      margin-bottom: 10px;
+      font-weight: 950;
+      margin-bottom: 12px;
     }
 
     .integrations-bar {
@@ -168,10 +326,8 @@
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
-      background: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 16px;
-      padding: 13px 15px;
+      border-radius: 18px;
+      padding: 14px 15px;
       margin-bottom: 18px;
     }
 
@@ -181,13 +337,13 @@
     }
 
     .integration-chip {
-      background: #020617;
-      border: 1px solid #334155;
+      background: rgba(2, 6, 23, 0.68);
+      border: 1px solid rgba(148, 163, 184, 0.22);
       color: #cbd5e1;
       padding: 7px 10px;
       border-radius: 999px;
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .before-after {
@@ -199,19 +355,12 @@
 
     .before-box,
     .after-box {
-      border-radius: 16px;
+      border-radius: 18px;
       padding: 18px;
-      border: 1px solid #334155;
-      background: #0f172a;
     }
 
-    .before-box {
-      border-color: #7f1d1d;
-    }
-
-    .after-box {
-      border-color: #047857;
-    }
+    .before-box { border-color: rgba(239, 68, 68, 0.34); }
+    .after-box { border-color: rgba(16, 185, 129, 0.36); }
 
     .before-box h3,
     .after-box h3 {
@@ -219,93 +368,65 @@
       font-size: 18px;
     }
 
-    .before-box h3 {
-      color: #fecaca;
-    }
-
-    .after-box h3 {
-      color: #bbf7d0;
-    }
+    .before-box h3 { color: #fecaca; }
+    .after-box h3 { color: #bbf7d0; }
 
     .before-box ul,
     .after-box ul {
       margin: 0;
       padding-left: 18px;
       color: #cbd5e1;
-      line-height: 1.7;
+      line-height: 1.75;
       font-size: 14px;
     }
 
-    .impact-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-bottom: 20px;
+    .impact-card,
+    .kpi {
+      border-radius: 18px;
+      padding: 17px;
     }
 
-    .impact-card {
-      background: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 16px;
-      padding: 16px;
+    .impact-number,
+    .kpi-number {
+      font-weight: 950;
+      color: var(--blue);
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
     }
 
-    .impact-number {
-      font-size: 26px;
-      font-weight: 900;
-      color: #38bdf8;
-      margin-bottom: 5px;
-    }
+    .impact-number { font-size: 28px; }
+    .kpi-number { font-size: 32px; }
 
-    .impact-label {
-      color: #94a3b8;
+    .impact-label,
+    .kpi-label {
+      color: var(--muted);
       font-size: 13px;
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 14px;
       margin-bottom: 20px;
     }
 
-    .kpi {
-      background: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 16px;
-      padding: 16px;
-    }
-
-    .kpi-number {
-      font-size: 30px;
-      font-weight: 800;
-      color: #38bdf8;
-      margin-bottom: 5px;
-    }
-
-    .kpi-label {
-      color: #94a3b8;
-      font-size: 13px;
-    }
-
     .main-grid {
       display: grid;
-      grid-template-columns: 390px 1fr;
+      grid-template-columns: 390px minmax(0, 1fr);
       gap: 20px;
       align-items: start;
     }
 
     .card {
-      background: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 18px;
+      border-radius: 22px;
       padding: 20px;
     }
 
     .card h3 {
       margin: 0 0 16px;
       font-size: 20px;
+      letter-spacing: -0.2px;
     }
 
     label {
@@ -313,37 +434,35 @@
       margin-bottom: 6px;
       color: #cbd5e1;
       font-size: 13px;
+      font-weight: 800;
     }
 
-    input, textarea, select {
+    input,
+    textarea,
+    select {
       width: 100%;
       padding: 12px;
       margin-bottom: 13px;
-      border-radius: 10px;
-      border: 1px solid #334155;
-      background: #020617;
-      color: #e5e7eb;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      background: rgba(2, 6, 23, 0.8);
+      color: var(--text);
       outline: none;
       font-size: 14px;
+      transition: border 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
     }
 
-    input:focus, textarea:focus, select:focus {
-      border-color: #38bdf8;
+    textarea {
+      resize: vertical;
+      min-height: 86px;
     }
 
-    button {
-      border: none;
-      border-radius: 10px;
-      background: #2563eb;
-      color: white;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      padding: 11px 13px;
-    }
-
-    button:hover {
-      background: #1d4ed8;
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
+      background: rgba(2, 6, 23, 0.96);
     }
 
     .full-button {
@@ -354,21 +473,21 @@
     .message {
       margin-top: 14px;
       padding: 12px;
-      border-radius: 10px;
+      border-radius: 12px;
       display: none;
       font-size: 14px;
       line-height: 1.5;
     }
 
     .success {
-      background: #064e3b;
-      border: 1px solid #10b981;
+      background: rgba(6, 78, 59, 0.94);
+      border: 1px solid rgba(16, 185, 129, 0.75);
       color: #d1fae5;
     }
 
     .error {
-      background: #7f1d1d;
-      border: 1px solid #ef4444;
+      background: rgba(127, 29, 29, 0.94);
+      border: 1px solid rgba(239, 68, 68, 0.75);
       color: #fee2e2;
     }
 
@@ -379,16 +498,16 @@
       z-index: 999;
       display: none;
       padding: 13px 16px;
-      border-radius: 12px;
+      border-radius: 14px;
       font-size: 14px;
-      font-weight: 700;
-      max-width: 350px;
+      font-weight: 800;
+      max-width: min(380px, calc(100vw - 36px));
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
     }
 
     .toolbar {
       display: grid;
-      grid-template-columns: 1.4fr 1fr 1fr auto auto auto;
+      grid-template-columns: minmax(220px, 1.4fr) minmax(145px, 1fr) minmax(180px, 1fr) auto auto auto;
       gap: 10px;
       margin-bottom: 14px;
       align-items: center;
@@ -401,100 +520,73 @@
 
     .table-wrap {
       overflow-x: auto;
-      border: 1px solid #334155;
-      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 16px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 880px;
-      background: #020617;
+      min-width: 980px;
+      background: rgba(2, 6, 23, 0.55);
     }
 
     th {
       text-align: left;
-      color: #94a3b8;
+      color: var(--muted);
       font-size: 12px;
       padding: 13px;
-      border-bottom: 1px solid #334155;
-      background: #0b1120;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.23);
+      background: rgba(11, 17, 32, 0.95);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.6px;
     }
 
     td {
       padding: 13px;
-      border-bottom: 1px solid #1e293b;
+      border-bottom: 1px solid rgba(30, 41, 59, 0.95);
       font-size: 14px;
-      color: #e5e7eb;
+      color: var(--text);
       vertical-align: middle;
     }
 
     tr:hover td {
-      background: #0b1120;
+      background: rgba(11, 17, 32, 0.9);
     }
 
     .muted {
-      color: #94a3b8;
+      color: var(--muted);
       font-size: 13px;
     }
 
     .badge {
-      display: inline-block;
-      padding: 5px 9px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: fit-content;
+      padding: 6px 9px;
       border-radius: 999px;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 900;
       white-space: nowrap;
+      border: 1px solid transparent;
     }
 
-    .badge-blue {
-      background: #1e3a8a;
-      color: #bfdbfe;
-    }
-
-    .badge-green {
-      background: #064e3b;
-      color: #bbf7d0;
-    }
-
-    .badge-red {
-      background: #7f1d1d;
-      color: #fecaca;
-    }
-
-    .badge-orange {
-      background: #78350f;
-      color: #fed7aa;
-    }
-
-    .badge-gray {
-      background: #334155;
-      color: #e2e8f0;
-    }
-
-    .badge-hot {
-      background: #7f1d1d;
-      color: #fecaca;
-    }
-
-    .badge-warm {
-      background: #78350f;
-      color: #fed7aa;
-    }
-
-    .badge-cold {
-      background: #1e3a8a;
-      color: #bfdbfe;
-    }
+    .badge-blue { background: rgba(30, 58, 138, 0.74); color: #bfdbfe; border-color: rgba(147, 197, 253, 0.2); }
+    .badge-green { background: rgba(6, 78, 59, 0.78); color: #bbf7d0; border-color: rgba(16, 185, 129, 0.24); }
+    .badge-red { background: rgba(127, 29, 29, 0.82); color: #fecaca; border-color: rgba(239, 68, 68, 0.24); }
+    .badge-orange { background: rgba(120, 53, 15, 0.82); color: #fed7aa; border-color: rgba(245, 158, 11, 0.25); }
+    .badge-gray { background: rgba(51, 65, 85, 0.85); color: #e2e8f0; border-color: rgba(148, 163, 184, 0.2); }
+    .badge-hot { background: rgba(127, 29, 29, 0.82); color: #fecaca; border-color: rgba(239, 68, 68, 0.28); }
+    .badge-warm { background: rgba(120, 53, 15, 0.82); color: #fed7aa; border-color: rgba(245, 158, 11, 0.25); }
+    .badge-cold { background: rgba(30, 58, 138, 0.74); color: #bfdbfe; border-color: rgba(147, 197, 253, 0.2); }
 
     .details-box {
       display: none;
       margin-top: 20px;
-      background: #020617;
-      border: 1px solid #334155;
-      border-radius: 16px;
+      background: rgba(2, 6, 23, 0.72);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 18px;
       padding: 18px;
     }
 
@@ -512,18 +604,19 @@
 
     .detail-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
       margin-bottom: 16px;
     }
 
     .detail-line {
-      background: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 10px;
-      padding: 10px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 12px;
+      padding: 11px;
       color: #cbd5e1;
       font-size: 14px;
+      overflow-wrap: anywhere;
     }
 
     .detail-line strong {
@@ -531,27 +624,29 @@
     }
 
     .panel {
-      background: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 12px;
-      padding: 13px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 14px;
+      padding: 14px;
       color: #dbeafe;
       font-size: 14px;
-      line-height: 1.6;
+      line-height: 1.65;
       white-space: pre-wrap;
       margin-bottom: 14px;
+      overflow-wrap: anywhere;
     }
 
     .section-title {
       margin: 18px 0 10px;
       color: #f8fafc;
       font-size: 18px;
+      letter-spacing: -0.2px;
     }
 
     .log-item {
-      background: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 12px;
       padding: 10px;
       margin-bottom: 8px;
       font-size: 13px;
@@ -559,7 +654,7 @@
     }
 
     .log-item small {
-      color: #94a3b8;
+      color: var(--muted);
     }
 
     .action-row {
@@ -569,70 +664,42 @@
       margin: 16px 0;
     }
 
-    .green-button {
-      background: #047857;
-    }
-
-    .green-button:hover {
-      background: #065f46;
-    }
-
-    .orange-button {
-      background: #b45309;
-    }
-
-    .orange-button:hover {
-      background: #92400e;
-    }
-
-    .red-button {
-      background: #b91c1c;
-    }
-
-    .red-button:hover {
-      background: #991b1b;
-    }
-
-    .purple-button {
-      background: #6d28d9;
-    }
-
-    .purple-button:hover {
-      background: #5b21b6;
-    }
-
-    .gray-button {
-      background: #475569;
-    }
-
-    .gray-button:hover {
-      background: #334155;
-    }
-
     .small-button {
       padding: 8px 10px;
       font-size: 12px;
       background: #1e40af;
     }
 
+    .mini-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
     .empty-state {
       padding: 25px;
-      color: #94a3b8;
+      color: var(--muted);
       text-align: center;
     }
 
-    @media (max-width: 1150px) {
+    .loading-row {
+      padding: 25px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 1180px) {
       .hero {
         grid-template-columns: 1fr;
       }
 
       .sales-grid,
       .impact-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .kpi-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
       .main-grid {
@@ -644,7 +711,26 @@
       }
     }
 
-    @media (max-width: 700px) {
+    @media (max-width: 720px) {
+      .container {
+        width: min(94%, 1520px);
+        padding-top: 18px;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .top-actions {
+        justify-content: flex-start;
+        width: 100%;
+      }
+
+      .top-actions button {
+        flex: 1;
+      }
+
       .sales-grid,
       .impact-grid,
       .before-after {
@@ -652,7 +738,7 @@
       }
 
       .kpi-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .toolbar {
@@ -663,43 +749,59 @@
         grid-template-columns: 1fr;
       }
 
-      .topbar {
+      .details-header {
         flex-direction: column;
-        align-items: flex-start;
       }
 
-      .revenue-number {
-        font-size: 30px;
+      .hero {
+        padding: 20px;
+      }
+
+      .hero-list {
+        gap: 8px;
+      }
+
+      button {
+        white-space: normal;
       }
     }
   </style>
 </head>
 
 <body>
-  <div id="toastBox" class="toast"></div>
+  <div id="toastBox" class="toast" role="status" aria-live="polite"></div>
 
   <div class="container">
     <div class="topbar">
       <div class="brand">
         <h1>LeadFlow Command Center</h1>
-        <span>AI-powered lead capture, CRM sync, follow-up, scoring, and tracking system.</span>
+        <span>AI-powered lead capture, HubSpot connection, real email follow-up, scoring, and tracking system.</span>
       </div>
 
       <div class="top-actions">
-        <button class="green-button" onclick="bookDemo()">Build This For My Business</button>
-        <button class="purple-button" onclick="exportLeadsCsv()">Export Report</button>
-        <div class="pill">Agency Demo</div>
+        <button class="btn-green" type="button" onclick="bookDemo()">Build This For My Business</button>
+        <button class="btn-purple" type="button" onclick="exportLeadsCsv()">Export Report</button>
+        <div class="pill">Live Demo</div>
       </div>
     </div>
 
-    <div class="hero">
-      <div>
-        <h2>Never lose, duplicate, or delay a new lead again.</h2>
+    <section class="hero">
+      <div class="hero-content">
+        <div class="eyebrow">Lead Operations Dashboard</div>
+        <h2>Capture, qualify, reply, and track every lead from one command center.</h2>
         <p>
-          LeadFlow captures every new lead, blocks duplicates, syncs contacts to CRM,
-          scores lead quality, prepares follow-up drafts, exports reports, and tracks every action
-          from one clean command center.
+          LeadFlow captures new leads, blocks duplicates, syncs contacts to HubSpot ,
+          scores lead quality, sends real email follow-ups, exports reports, and tracks every action
+          from one clean SaaS-style dashboard.
         </p>
+
+        <div class="hero-list">
+          <span>Duplicate blocking</span>
+          <span>Real Gmail sending</span>
+          <span class="badge">HubSpot connected</span>
+          <span>Lead scoring</span>
+          <span>CSV reporting</span>
+        </div>
       </div>
 
       <div class="hero-revenue-card">
@@ -709,9 +811,9 @@
           Based on current leads, service type, budget, and lead quality score.
         </div>
       </div>
-    </div>
+    </section>
 
-    <div class="sales-grid">
+    <section class="sales-grid" aria-label="System benefits">
       <div class="sales-card">
         <div class="sales-icon">1</div>
         <h4>No Lost Leads</h4>
@@ -721,40 +823,41 @@
       <div class="sales-card">
         <div class="sales-icon">2</div>
         <h4>Duplicates Blocked</h4>
-        <p>Repeated submissions are detected before they create messy CRM records.</p>
+        <p>Repeated submissions are detected before they create messy HubSpot  records.</p>
       </div>
 
       <div class="sales-card">
         <div class="sales-icon">3</div>
-        <h4>Faster Follow-up</h4>
-        <p>Email drafts and lead details are ready instantly so your team can respond faster.</p>
+        <h4>Real Follow-up</h4>
+        <p>Send real email replies directly from the dashboard using your connected Gmail account.</p>
       </div>
 
-      <div class="sales-card">
-        <div class="sales-icon">4</div>
-        <h4>Cleaner CRM</h4>
-        <p>Qualified leads sync into CRM with status, history, and activity tracking.</p>
-      </div>
-    </div>
+        <div class="sales-card">
+  <div class="step-number">4</div>
+  <h4>Cleaner HubSpot HubSpot  Pipeline</h4>
+  <p>Qualified leads are created or updated inside HubSpot with status, history, and activity tracking.</p>
+</div>
+    </section>
 
-    <div class="integrations-bar">
-      <strong>Works with:</strong>
-      <span class="integration-chip">GoHighLevel</span>
-      <span class="integration-chip">HubSpot</span>
-      <span class="integration-chip">Google Sheets</span>
-      <span class="integration-chip">Gmail</span>
-      <span class="integration-chip">WhatsApp</span>
-      <span class="integration-chip">Slack</span>
-      <span class="integration-chip">Any CRM with API</span>
-    </div>
+    <section class="integrations-bar">
+  <strong>Works with:</strong>
+  <span class="integration-chip">HubSpot HubSpot </span>
+  <span class="integration-chip">GoHighLevel Ready</span>
+  <span class="integration-chip">Gmail SMTP</span>
+  <span class="integration-chip">API Webhooks</span>
+  <span class="integration-chip">CSV Export</span>
+  <span class="integration-chip">Google Sheets Optional</span>
+  <span class="integration-chip">Slack / WhatsApp Ready</span>
+  <span class="integration-chip">Any HubSpot  with API</span>
+</section>
 
-    <div class="before-after">
+    <section class="before-after">
       <div class="before-box">
         <h3>Before LeadFlow</h3>
         <ul>
           <li>Leads scattered across forms, inboxes, spreadsheets, and ads.</li>
           <li>Slow replies cause hot leads to go cold.</li>
-          <li>Duplicate leads create messy CRM data.</li>
+          <li>Duplicate leads create messy HubSpot  data.</li>
           <li>No clear visibility into what happened with each lead.</li>
         </ul>
       </div>
@@ -764,13 +867,13 @@
         <ul>
           <li>Every lead is captured in one command center.</li>
           <li>Hot leads are scored and prioritized.</li>
-          <li>Follow-up drafts are ready instantly.</li>
-          <li>CRM sync and every action are tracked automatically.</li>
+          <li>Real follow-up emails are sent from the dashboard.</li>
+          <li>Every HubSpot contact update and dashboard action is tracked automatically.</li>
         </ul>
       </div>
-    </div>
+    </section>
 
-    <div class="impact-grid">
+    <section class="impact-grid" aria-label="Impact metrics">
       <div class="impact-card">
         <div class="impact-number" id="hotPipeline">$0</div>
         <div class="impact-label">Hot lead pipeline detected</div>
@@ -783,16 +886,16 @@
 
       <div class="impact-card">
         <div class="impact-number" id="crmHealth">0%</div>
-        <div class="impact-label">CRM sync health</div>
+        <div class="impact-label">HubSpot connected health</div>
       </div>
 
       <div class="impact-card">
         <div class="impact-number" id="responseRisk">0</div>
         <div class="impact-label">Leads still waiting for first reply</div>
       </div>
-    </div>
+    </section>
 
-    <div class="kpi-grid">
+    <section class="kpi-grid" aria-label="Dashboard KPIs">
       <div class="kpi">
         <div class="kpi-number" id="totalLeads">0</div>
         <div class="kpi-label">Total Leads</div>
@@ -810,7 +913,7 @@
 
       <div class="kpi">
         <div class="kpi-number" id="crmSyncedLeads">0</div>
-        <div class="kpi-label">CRM Synced</div>
+        <div class="kpi-label">HubSpot connected</div>
       </div>
 
       <div class="kpi">
@@ -822,23 +925,23 @@
         <div class="kpi-number" id="hotLeads">0</div>
         <div class="kpi-label">Hot Leads</div>
       </div>
-    </div>
+    </section>
 
-    <div class="main-grid">
-      <div class="card">
+    <main class="main-grid">
+      <section class="card">
         <h3>Submit New Lead</h3>
 
         <form id="leadForm">
-          <label>Name</label>
-          <input type="text" id="name" placeholder="Example: Ahmed Mohamed" required />
+          <label for="name">Name</label>
+          <input type="text" id="name" placeholder="Example: Ahmed Mohamed" autocomplete="name" required />
 
-          <label>Email</label>
-          <input type="email" id="email" placeholder="example@gmail.com" required />
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="example@gmail.com" autocomplete="email" required />
 
-          <label>Phone</label>
-          <input type="text" id="phone" placeholder="01000000000" required />
+          <label for="phone">Phone</label>
+          <input type="text" id="phone" placeholder="01000000000" autocomplete="tel" required />
 
-          <label>Service Needed</label>
+          <label for="service">Service Needed</label>
           <select id="service" required>
             <option value="">Choose service</option>
             <option value="SEO">SEO</option>
@@ -848,22 +951,22 @@
             <option value="Home Cleaning">Home Cleaning</option>
           </select>
 
-          <label>Budget</label>
-          <input type="text" id="budget" placeholder="Example: 1000" />
+          <label for="budget">Budget</label>
+          <input type="text" id="budget" placeholder="Example: 1000" inputmode="numeric" />
 
-          <label>Best Time To Contact</label>
+          <label for="bestTimeToContact">Best Time To Contact</label>
           <input type="text" id="bestTimeToContact" placeholder="Example: Morning / Today / ASAP" />
 
-          <label>Notes</label>
+          <label for="notes">Notes</label>
           <textarea id="notes" rows="3" placeholder="Optional lead notes"></textarea>
 
-          <button class="full-button" type="submit">Submit Lead</button>
+          <button id="submitLeadButton" class="btn-primary full-button" type="submit">Submit Lead</button>
 
           <div id="messageBox" class="message"></div>
         </form>
-      </div>
+      </section>
 
-      <div class="card">
+      <section class="card">
         <h3>Lead Management</h3>
 
         <div class="toolbar">
@@ -884,9 +987,9 @@
             <option value="Home Cleaning">Home Cleaning</option>
           </select>
 
-          <button onclick="loadLeads()">Search</button>
-          <button onclick="resetFilters()">Reset</button>
-          <button class="purple-button" onclick="exportLeadsCsv()">Export CSV</button>
+          <button class="btn-primary" type="button" onclick="loadLeads()">Search</button>
+          <button class="btn-gray" type="button" onclick="resetFilters()">Reset</button>
+          <button class="btn-purple" type="button" onclick="exportLeadsCsv()">Export CSV</button>
         </div>
 
         <div class="table-wrap">
@@ -896,25 +999,33 @@
                 <th>Lead</th>
                 <th>Service</th>
                 <th>Status</th>
-                <th>CRM</th>
+                <th>Email</th>
+                <th>HubSpot </th>
                 <th>Score</th>
                 <th>Created</th>
-                <th>Action</th>
+                <th>Actions</th>
               </tr>
             </thead>
-            <tbody id="leadsTableBody"></tbody>
+            <tbody id="leadsTableBody">
+              <tr>
+                <td colspan="8">
+                  <div class="loading-row">Loading leads...</div>
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
 
         <div id="leadDetails" class="details-box"></div>
-      </div>
-    </div>
+      </section>
+    </main>
   </div>
 
   <script>
     const leadForm = document.getElementById("leadForm");
     const messageBox = document.getElementById("messageBox");
     const toastBox = document.getElementById("toastBox");
+    const submitLeadButton = document.getElementById("submitLeadButton");
 
     let currentEmailDraftText = "";
 
@@ -937,7 +1048,7 @@
         .replaceAll("'", "&#039;");
     }
 
-    function showMessage(message, type) {
+    function showMessage(message, type = "success") {
       messageBox.textContent = message;
       messageBox.className = "message " + type;
       messageBox.style.display = "block";
@@ -946,13 +1057,14 @@
       toastBox.className = "toast " + type;
       toastBox.style.display = "block";
 
-      setTimeout(() => {
+      window.clearTimeout(showMessage.hideTimer);
+      showMessage.hideTimer = window.setTimeout(() => {
         toastBox.style.display = "none";
-      }, 3000);
+      }, 3200);
     }
 
     function bookDemo() {
-    showMessage("Great. In the live version, this would open a booking calendar or send the request to your sales team.", "success");
+      showMessage("In production, this would open a booking calendar or notify your sales team.", "success");
     }
 
     function formatDate(dateString) {
@@ -962,11 +1074,58 @@
 
       const date = new Date(dateString);
 
-      if (isNaN(date.getTime())) {
+      if (Number.isNaN(date.getTime())) {
         return dateString;
       }
 
       return date.toLocaleString();
+    }
+
+    function getLogDate(log) {
+      return log.createdAt || log.date || log.timestamp || "";
+    }
+
+    function getEmailDraftBody(lead) {
+      if (!lead || !lead.emailDraft) {
+        return "No email draft found.";
+      }
+
+      if (typeof lead.emailDraft === "string") {
+        return lead.emailDraft;
+      }
+
+      return (
+        lead.emailDraft.body ||
+        lead.emailDraft.text ||
+        lead.emailDraft.message ||
+        JSON.stringify(lead.emailDraft, null, 2)
+      );
+    }
+
+    function getEmailSentStatus(lead) {
+      if (lead.emailSent === true || lead.firstReplySent === "Yes" || lead.status === "Replied") {
+        return {
+          label: "Sent",
+          className: "badge-green"
+        };
+      }
+
+      return {
+        label: "Not Sent",
+        className: "badge-orange"
+      };
+    }
+
+    function getStatusBadgeClass(status) {
+      if (status === "Replied") {
+        return "badge-green";
+      }
+
+      if (status === "New Lead") {
+        return "badge-blue";
+      }
+
+      return "badge-gray";
     }
 
     function getEstimatedDealValue(lead) {
@@ -1046,7 +1205,7 @@
 
       if (lead.crmSynced === true) {
         score += 5;
-        reasons.push("CRM synced successfully");
+        reasons.push("HubSpot  synced successfully");
       }
 
       let label = "Cold";
@@ -1062,9 +1221,9 @@
 
       return {
         score: Math.min(score, 100),
-        label: label,
-        className: className,
-        reasons: reasons
+        label,
+        className,
+        reasons
       };
     }
 
@@ -1100,14 +1259,29 @@
       };
     }
 
+    async function fetchJson(url, options = {}) {
+      const response = await fetch(url, options);
+      let result = {};
+
+      try {
+        result = await response.json();
+      } catch (error) {
+        result = {};
+      }
+
+      if (!response.ok) {
+        throw new Error(result.message || result.error || "Request failed");
+      }
+
+      return result;
+    }
+
     async function loadDashboard() {
       try {
-        const dashboardResponse = await fetch("/dashboard");
-        const dashboardResult = await dashboardResponse.json();
-        const data = dashboardResult.data;
+        const dashboardResult = await fetchJson("/dashboard");
+        const data = dashboardResult.data || {};
 
-        const leadsResponse = await fetch("/leads");
-        const leadsResult = await leadsResponse.json();
+        const leadsResult = await fetchJson("/leads");
         const leads = leadsResult.data || [];
 
         const duplicateCount = data.duplicateBlocked ?? data.duplicateBlockedCount ?? 0;
@@ -1130,12 +1304,23 @@
         document.getElementById("pipelineNote").textContent =
           `${hotCount} hot leads detected. Pipeline estimate uses service value, budget, and lead quality.`;
       } catch (error) {
-        console.log(error);
+        console.error(error);
+        showMessage("Could not load dashboard. Make sure the backend is running.", "error");
       }
     }
 
     async function loadLeads() {
+      const tableBody = document.getElementById("leadsTableBody");
+
       try {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="8">
+              <div class="loading-row">Loading leads...</div>
+            </td>
+          </tr>
+        `;
+
         const search = document.getElementById("searchInput").value.trim();
         const status = document.getElementById("statusFilter").value;
         const service = document.getElementById("serviceFilter").value;
@@ -1155,19 +1340,15 @@
         }
 
         const url = params.toString() ? `/leads?${params.toString()}` : "/leads";
-
-        const response = await fetch(url);
-        const result = await response.json();
-
-        const tableBody = document.getElementById("leadsTableBody");
-        tableBody.innerHTML = "";
-
+        const result = await fetchJson(url);
         const leads = result.data || [];
+
+        tableBody.innerHTML = "";
 
         if (leads.length === 0) {
           tableBody.innerHTML = `
             <tr>
-              <td colspan="7">
+              <td colspan="8">
                 <div class="empty-state">No leads found.</div>
               </td>
             </tr>
@@ -1179,10 +1360,8 @@
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
           .forEach((lead) => {
             const score = calculateLeadScore(lead);
-
-            const statusBadgeClass = lead.status === "Replied" ? "badge-green" : "badge-blue";
+            const emailStatus = getEmailSentStatus(lead);
             const crmBadgeClass = lead.crmSynced ? "badge-green" : "badge-red";
-
             const row = document.createElement("tr");
 
             row.innerHTML = `
@@ -1197,7 +1376,11 @@
               </td>
 
               <td>
-                <span class="badge ${statusBadgeClass}">${escapeHtml(lead.status)}</span>
+                <span class="badge ${getStatusBadgeClass(lead.status)}">${escapeHtml(lead.status || "New Lead")}</span>
+              </td>
+
+              <td>
+                <span class="badge ${emailStatus.className}">${emailStatus.label}</span>
               </td>
 
               <td>
@@ -1213,14 +1396,24 @@
               </td>
 
               <td>
-                <button class="small-button" onclick="loadLeadDetails(${lead.id})">Open</button>
+                <div class="mini-actions">
+                  <button class="small-button" type="button" onclick="loadLeadDetails(${lead.id})">Open</button>
+                  <button class="small-button btn-green" type="button" onclick="sendEmailToLead(${lead.id}, this)">Send Email</button>
+                </div>
               </td>
             `;
 
             tableBody.appendChild(row);
           });
       } catch (error) {
-        console.log(error);
+        console.error(error);
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="8">
+              <div class="empty-state">Failed to load leads. Make sure the backend is running.</div>
+            </td>
+          </tr>
+        `;
       }
     }
 
@@ -1233,31 +1426,33 @@
 
     async function loadLeadDetails(leadId) {
       try {
-        const response = await fetch(`/leads/${leadId}`);
-        const result = await response.json();
-
+        const result = await fetchJson(`/leads/${leadId}`);
         const lead = result.data;
+
+        if (!lead) {
+          showMessage("Lead not found.", "error");
+          return;
+        }
+
         const detailsBox = document.getElementById("leadDetails");
         const score = calculateLeadScore(lead);
         const estimatedValue = getEstimatedDealValue(lead);
+        const emailStatus = getEmailSentStatus(lead);
+        const emailDraftBody = getEmailDraftBody(lead);
+
+        currentEmailDraftText = emailDraftBody === "No email draft found." ? "" : emailDraftBody;
 
         const logsHtml = lead.logs && lead.logs.length > 0
-          ? lead.logs.map((log) => {
+          ? [...lead.logs].reverse().map((log) => {
               return `
                 <div class="log-item">
-                  <strong>${escapeHtml(log.action)}</strong><br>
-                  <span>${escapeHtml(log.details)}</span><br>
-                  <small>${escapeHtml(formatDate(log.createdAt))}</small>
+                  <strong>${escapeHtml(log.action || "Log")}</strong><br>
+                  <span>${escapeHtml(log.details || "")}</span><br>
+                  <small>${escapeHtml(formatDate(getLogDate(log)))}</small>
                 </div>
               `;
             }).join("")
           : "<p class='muted'>No logs found.</p>";
-
-        const emailDraftBody = lead.emailDraft
-          ? lead.emailDraft.body
-          : "No email draft found.";
-
-        currentEmailDraftText = emailDraftBody;
 
         const scoreReasons = score.reasons.length > 0
           ? score.reasons.map((reason) => `• ${reason}`).join("\n")
@@ -1269,7 +1464,7 @@
           <div class="details-header">
             <div>
               <h3>Lead Details</h3>
-              <div class="muted">Full lead profile, AI score, CRM status, follow-up draft, and activity timeline.</div>
+              <div class="muted">Full lead profile, score, HubSpot  status, real email follow-up, and activity timeline.</div>
             </div>
 
             <span class="badge ${score.className}">${score.label} Lead — ${score.score}/100</span>
@@ -1280,32 +1475,35 @@
             <div class="detail-line"><strong>Email:</strong> ${escapeHtml(lead.email)}</div>
             <div class="detail-line"><strong>Phone:</strong> ${escapeHtml(lead.phone)}</div>
             <div class="detail-line"><strong>Service:</strong> ${escapeHtml(lead.service)}</div>
-            <div class="detail-line"><strong>Budget:</strong> ${escapeHtml(lead.budget)}</div>
+            <div class="detail-line"><strong>Budget:</strong> ${escapeHtml(lead.budget || "Not provided")}</div>
             <div class="detail-line"><strong>Estimated Value:</strong> ${currency.format(estimatedValue)}</div>
-            <div class="detail-line"><strong>Status:</strong> ${escapeHtml(lead.status)}</div>
-            <div class="detail-line"><strong>First Reply:</strong> ${escapeHtml(lead.firstReplySent)}</div>
-            <div class="detail-line"><strong>CRM Synced:</strong> ${lead.crmSynced ? "Yes" : "No"}</div>
-            <div class="detail-line"><strong>CRM ID:</strong> ${escapeHtml(lead.crmId || "Not synced")}</div>
+            <div class="detail-line"><strong>Status:</strong> ${escapeHtml(lead.status || "New Lead")}</div>
+            <div class="detail-line"><strong>Email:</strong> <span class="badge ${emailStatus.className}">${emailStatus.label}</span></div>
+            <div class="detail-line"><strong>First Reply:</strong> ${escapeHtml(lead.firstReplySent || "No")}</div>
+            <div class="detail-line"><strong>Sent At:</strong> ${escapeHtml(formatDate(lead.emailSentAt))}</div>
+            <div class="detail-line"><strong>HubSpot Connected:</strong> ${lead.crmSynced ? "Yes" : "No"}</div>
+            <div class="detail-line"><strong>HubSpot  ID:</strong> ${escapeHtml(lead.crmId || "Not synced")}</div>
           </div>
 
           <div class="action-row">
-            <button class="green-button" onclick="markReplySent(${lead.id})">Mark Reply Sent</button>
-            <button class="orange-button" onclick="retryCrmSync(${lead.id})">Retry CRM Sync</button>
-            <button class="purple-button" onclick="copyEmailDraft()">Copy Email Draft</button>
-            <button class="gray-button" onclick="closeLeadDetails()">Close Details</button>
-            <button class="red-button" onclick="deleteLead(${lead.id})">Delete Lead</button>
+            <button class="btn-green" type="button" onclick="sendEmailToLead(${lead.id}, this)">Send Real Email</button>
+            <button class="btn-primary" type="button" onclick="markReplySent(${lead.id})">Mark Reply Sent</button>
+            <button class="btn-orange" type="button" onclick="retryCrmSync(${lead.id})">Retry HubSpot  Sync</button>
+            <button class="btn-purple" type="button" onclick="copyEmailDraft()">Copy Email Draft</button>
+            <button class="btn-gray" type="button" onclick="closeLeadDetails()">Close Details</button>
+            <button class="btn-red" type="button" onclick="deleteLead(${lead.id})">Delete Lead</button>
           </div>
 
-          <div class="section-title">AI Lead Score Reasoning</div>
+          <div class="section-title">Lead Score Reasoning</div>
           <div class="panel">${escapeHtml(scoreReasons)}</div>
 
           <div class="section-title">Business Impact</div>
           <div class="panel">Estimated opportunity value: ${currency.format(estimatedValue)}
 Lead quality: ${score.label} ${score.score}/100
-Recommended next step: ${score.label === "Hot" ? "Call this lead immediately." : score.label === "Warm" ? "Follow up today with a personalized message." : "Add to nurture sequence."}</div>
+Recommended next step: ${score.label === "Hot" ? "Call this lead immediately and send the follow-up email." : score.label === "Warm" ? "Follow up today with a personalized message." : "Add to nurture sequence."}</div>
 
-          <div class="section-title">AI Summary</div>
-          <div class="panel">${escapeHtml(lead.summary)}</div>
+          <div class="section-title">Summary</div>
+          <div class="panel">${escapeHtml(lead.summary || "No summary available.")}</div>
 
           <div class="section-title">Email Draft</div>
           <div class="panel">${escapeHtml(emailDraftBody)}</div>
@@ -1319,48 +1517,72 @@ Recommended next step: ${score.label === "Hot" ? "Call this lead immediately." :
           block: "start"
         });
       } catch (error) {
-        console.log(error);
+        console.error(error);
+        showMessage(error.message || "Failed to load lead details.", "error");
+      }
+    }
+
+    async function sendEmailToLead(leadId, buttonElement) {
+      const confirmed = confirm("Send the real follow-up email to this lead?");
+
+      if (!confirmed) {
+        return;
+      }
+
+      const originalText = buttonElement ? buttonElement.textContent : "";
+
+      try {
+        if (buttonElement) {
+          buttonElement.disabled = true;
+          buttonElement.textContent = "Sending...";
+        }
+
+        const result = await fetchJson(`/leads/${leadId}/send-email`, {
+          method: "POST"
+        });
+
+        showMessage(result.message || "Email sent successfully.", "success");
+        await refreshAll();
+        await loadLeadDetails(leadId);
+      } catch (error) {
+        console.error(error);
+        showMessage(error.message || "Failed to send email.", "error");
+      } finally {
+        if (buttonElement) {
+          buttonElement.disabled = false;
+          buttonElement.textContent = originalText || "Send Email";
+        }
       }
     }
 
     async function markReplySent(leadId) {
       try {
-        const response = await fetch(`/leads/${leadId}/reply-sent`, {
+        const result = await fetchJson(`/leads/${leadId}/reply-sent`, {
           method: "PUT"
         });
 
-        const result = await response.json();
-
-        if (response.ok) {
-          showMessage("Reply marked as sent successfully.", "success");
-          await refreshAll();
-          await loadLeadDetails(leadId);
-        } else {
-          showMessage(result.message || "Failed to update reply status.", "error");
-        }
+        showMessage(result.message || "Reply marked as sent successfully.", "success");
+        await refreshAll();
+        await loadLeadDetails(leadId);
       } catch (error) {
-        showMessage("Server error while marking reply as sent.", "error");
+        console.error(error);
+        showMessage(error.message || "Failed to update reply status.", "error");
       }
     }
 
     async function retryCrmSync(leadId) {
       try {
-        const response = await fetch(`/leads/${leadId}/retry-crm`, {
+        const result = await fetchJson(`/leads/${leadId}/retry-crm`, {
           method: "POST"
         });
 
-        const result = await response.json();
-
-        if (response.ok) {
-          showMessage(result.message || "CRM sync checked successfully.", "success");
-          await refreshAll();
-          await loadLeadDetails(leadId);
-        } else {
-          showMessage(result.message || "CRM retry failed.", "error");
-          await loadLeadDetails(leadId);
-        }
+        showMessage(result.message || "HubSpot connection checked successfully.", "success");
+        await refreshAll();
+        await loadLeadDetails(leadId);
       } catch (error) {
-        showMessage("Server error while retrying CRM sync.", "error");
+        console.error(error);
+        showMessage(error.message || "HubSpot  retry failed.", "error");
+        await loadLeadDetails(leadId);
       }
     }
 
@@ -1399,15 +1621,12 @@ Recommended next step: ${score.label === "Hot" ? "Call this lead immediately." :
       }
 
       const stringValue = String(value).replaceAll('"', '""');
-
       return `"${stringValue}"`;
     }
 
     async function exportLeadsCsv() {
       try {
-        const response = await fetch("/leads");
-        const result = await response.json();
-
+        const result = await fetchJson("/leads");
         const leads = result.data || [];
 
         if (leads.length === 0) {
@@ -1425,8 +1644,10 @@ Recommended next step: ${score.label === "Hot" ? "Call this lead immediately." :
           "Best Time To Contact",
           "Status",
           "First Reply Sent",
-          "CRM Synced",
-          "CRM ID",
+          "Email Sent",
+          "Email Sent At",
+          "HubSpot Connected",
+          "HubSpot  ID",
           "Lead Score",
           "Lead Score Label",
           "Estimated Deal Value",
@@ -1435,6 +1656,7 @@ Recommended next step: ${score.label === "Hot" ? "Call this lead immediately." :
 
         const rows = leads.map((lead) => {
           const score = calculateLeadScore(lead);
+          const emailStatus = getEmailSentStatus(lead);
 
           return [
             lead.id,
@@ -1446,6 +1668,8 @@ Recommended next step: ${score.label === "Hot" ? "Call this lead immediately." :
             lead.bestTimeToContact,
             lead.status,
             lead.firstReplySent,
+            emailStatus.label,
+            lead.emailSentAt || "",
             lead.crmSynced ? "Yes" : "No",
             lead.crmId || "",
             score.score,
@@ -1467,8 +1691,8 @@ Recommended next step: ${score.label === "Hot" ? "Call this lead immediately." :
         });
 
         const url = URL.createObjectURL(blob);
-
         const downloadLink = document.createElement("a");
+
         downloadLink.href = url;
         downloadLink.download = `leadflow-leads-${new Date().toISOString().slice(0, 10)}.csv`;
 
@@ -1480,6 +1704,7 @@ Recommended next step: ${score.label === "Hot" ? "Call this lead immediately." :
 
         showMessage("Leads exported successfully as CSV.", "success");
       } catch (error) {
+        console.error(error);
         showMessage("Failed to export leads.", "error");
       }
     }
@@ -1492,23 +1717,21 @@ Recommended next step: ${score.label === "Hot" ? "Call this lead immediately." :
       }
 
       try {
-        const response = await fetch(`/leads/${leadId}`, {
+        const result = await fetchJson(`/leads/${leadId}`, {
           method: "DELETE"
         });
 
-        const result = await response.json();
+        showMessage(result.message || "Lead deleted successfully.", "success");
 
-        if (response.ok) {
-          showMessage("Lead deleted successfully.", "success");
-          document.getElementById("leadDetails").style.display = "none";
-          document.getElementById("leadDetails").innerHTML = "";
-          currentEmailDraftText = "";
-          await refreshAll();
-        } else {
-          showMessage(result.message || "Failed to delete lead.", "error");
-        }
+        const detailsBox = document.getElementById("leadDetails");
+        detailsBox.style.display = "none";
+        detailsBox.innerHTML = "";
+        currentEmailDraftText = "";
+
+        await refreshAll();
       } catch (error) {
-        showMessage("Server error while deleting lead.", "error");
+        console.error(error);
+        showMessage(error.message || "Failed to delete lead.", "error");
       }
     }
 
@@ -1516,17 +1739,20 @@ Recommended next step: ${score.label === "Hot" ? "Call this lead immediately." :
       event.preventDefault();
 
       const leadData = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
+        name: document.getElementById("name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
         service: document.getElementById("service").value,
-        budget: document.getElementById("budget").value,
-        bestTimeToContact: document.getElementById("bestTimeToContact").value,
-        notes: document.getElementById("notes").value
+        budget: document.getElementById("budget").value.trim(),
+        bestTimeToContact: document.getElementById("bestTimeToContact").value.trim(),
+        notes: document.getElementById("notes").value.trim()
       };
 
       try {
-        const response = await fetch("/webhook/lead", {
+        submitLeadButton.disabled = true;
+        submitLeadButton.textContent = "Submitting...";
+
+        await fetchJson("/webhook/lead", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -1534,20 +1760,20 @@ Recommended next step: ${score.label === "Hot" ? "Call this lead immediately." :
           body: JSON.stringify(leadData)
         });
 
-        const result = await response.json();
-
-        if (response.status === 201) {
-          showMessage("Lead submitted successfully, scored, and synced to CRM.", "success");
-          leadForm.reset();
-          await refreshAll();
-        } else if (response.status === 409) {
+        showMessage("Lead submitted successfully, scored, and synced to HubSpot .", "success");
+        leadForm.reset();
+        await refreshAll();
+      } catch (error) {
+        console.error(error);
+        if (String(error.message).toLowerCase().includes("already exists")) {
           showMessage("Duplicate blocked: this lead already exists.", "error");
           await refreshAll();
         } else {
-          showMessage(result.message || "Something went wrong.", "error");
+          showMessage(error.message || "Something went wrong.", "error");
         }
-      } catch (error) {
-        showMessage("Server error. Please make sure the backend is running.", "error");
+      } finally {
+        submitLeadButton.disabled = false;
+        submitLeadButton.textContent = "Submit Lead";
       }
     });
 
@@ -1556,6 +1782,9 @@ Recommended next step: ${score.label === "Hot" ? "Call this lead immediately." :
         loadLeads();
       }
     });
+
+    document.getElementById("statusFilter").addEventListener("change", loadLeads);
+    document.getElementById("serviceFilter").addEventListener("change", loadLeads);
 
     async function refreshAll() {
       await loadDashboard();
